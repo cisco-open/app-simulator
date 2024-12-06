@@ -1,0 +1,41 @@
+{
+  "type": "nodejs",
+  "options": {
+    "connectionDelay": 500,
+    "httpLibrary": "request-promise"
+  },
+  "endpoints": {
+    "http": {
+      "/logo.png": ["sleep,1000"],
+      "/script.js": ["sleep,5000"],
+      "/checkout": ["http://backend/cart/checkout", "image,logo.png", "script,script.js","ajax,cache"],
+      "/addtocart": ["http://backend/cart/add", "slow,1500"],
+      "/cache": [["sleep,5000","sleep,5"], "cache,1024"],
+      "/schedule": ["sleep,50", {
+        "call": "error,500,oops",
+        "schedule": "0-30 * * * * * *"
+      }],
+      "/test": [{
+        "call": "http://localhost:9876/cache",
+        "catchExceptions": false,
+        "remoteTimeout": 2000
+      }],
+      "/data": ["sleep,50", "log,warn,do some logging", "log,more logging", {
+        "call": "data",
+        "id": "price",
+        "type": "double",
+        "value": [1,2,3]
+      }, {
+        "call": "data",
+        "id": "randomThingy",
+        "chance": "integer,min:5,max:13"
+      }, {
+        "call": "data",
+        "id": "stuff",
+        "chance": "letter,casing:upper"
+      }],
+      "/script": ["code,sample.js"]
+    }
+  },
+  "name": "frontend"
+}

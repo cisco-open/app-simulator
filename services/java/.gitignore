@@ -1,0 +1,6 @@
+.idea
+*.class
+target/maven-*
+extras/*.jar
+target/
+node.log
