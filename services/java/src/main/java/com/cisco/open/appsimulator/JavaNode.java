@@ -50,20 +50,13 @@ public class JavaNode {
 
                 logger.info("Reading AppConfig");
                 String envAppConfig = System.getenv("APP_CONFIG");
-                String envApmConfig = System.getenv("APM_CONFIG");
 
                 if (envAppConfig == null) {
                         envAppConfig = "{\"endpoints\":{\"http\":{}}}";
                 }
 
-                if (envApmConfig == null) {
-                        envApmConfig = "{}";
-                }
-
                 JsonReader jsonReader = Json.createReader(new StringReader(envAppConfig));
                 JsonObject config = jsonReader.readObject();
-                jsonReader = Json.createReader(new StringReader(envApmConfig));
-                JsonObject apmConfig = jsonReader.readObject();
 
                 CacheManager cm = CacheManager.getInstance();
 
@@ -76,7 +69,7 @@ public class JavaNode {
                 ServletHandler handler = new ServletHandler();
                 server.setHandler(handler);
                 logger.info("NodeServlet setConfig");
-                NodeServlet.setConfig(config, apmConfig);
+                NodeServlet.setConfig(config);
 
                 handler.addServletWithMapping(NodeServlet.class, "/*");
 
@@ -87,12 +80,10 @@ public class JavaNode {
         @SuppressWarnings("serial")
         public static class NodeServlet extends HttpServlet {
                 protected static JsonObject config;
-                protected static JsonObject apmConfig;
                 protected static JsonObject endpoints;
 
-                public static void setConfig(JsonObject config, JsonObject apmConfig) {
+                public static void setConfig(JsonObject configg) {
                         NodeServlet.config = config;
-                        NodeServlet.apmConfig = apmConfig;
                         NodeServlet.endpoints = config.getJsonObject("endpoints").getJsonObject("http");
                         logger.info("Config: {}", config.toString());
                         logger.info("Config: {}", config.getJsonObject("endpoints").getJsonObject("http").toString());
@@ -113,10 +104,10 @@ public class JavaNode {
                         long start = System.currentTimeMillis();
                         long finish = start;
                         int i = 0;
-                        Integer element = new Integer(0);
+                        Integer element = Integer.valueOf(0);
                         while (finish - start < timeout) {
                                 i++;
-                                element = new Integer(i);
+                                element = Integer.valueOf(i);
                                 cache.putIfAbsent(new Element(element, i));
                                 finish = System.currentTimeMillis();
                         }
