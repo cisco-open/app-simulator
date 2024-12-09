@@ -1,0 +1,15 @@
+name: Check container builds
+
+on:
+    push:
+      branches: [ main ]
+    pull_request:
+      branches: [ main ]
+    workflow_dispatch:
+
+jobs:
+    build:
+        uses: ./.github/workflows/reusable-build-container-images.yml
+        with:
+            push: false
+            release_stream: dev
