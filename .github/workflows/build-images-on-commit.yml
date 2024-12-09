@@ -1,0 +1,17 @@
+name: Build and publish dev container images
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'loaders/**'
+      - 'services/**'
+      - '.version'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable-build-container-images.yml
+    with:
+      push: true
+      release_stream: dev
