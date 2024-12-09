@@ -28,6 +28,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
+      - name: Bump version
+        # Only bump the version if the release stream is not 'latest'
+        # This way we make sure that released versions are fixed to their version
+        # and that 'dev' or other non stable releases do not overwrite.
+        if: ${{ inputs.release_stream != 'latest' }}
+        run: ./bumpversion.sh --build
       - name: Read version from .version file
         id: version
         run: echo "::set-output name=version::$(cat .version)"
