@@ -42,7 +42,8 @@ jobs:
         with:
           registry: ghcr.io
           username: cisco-service
-          password: ${{ secrets.PACKAGE_PUBLICATION_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          # password: ${{ secrets.PACKAGE_PUBLICATION_TOKEN }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
