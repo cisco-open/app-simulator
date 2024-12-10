@@ -19,6 +19,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    permissions:
+      packages: write
     strategy:
       matrix:
         image:
@@ -58,3 +60,5 @@ jobs:
           tags: |
             ${{ inputs.registry_ghcr }}-${{ matrix.image.name }}:${{ steps.version.outputs.version }}
             ${{ inputs.registry_ghcr }}-${{ matrix.image.name }}:${{ inputs.release_stream }}
+          cache-from: type=gha
+          cache-to: type=gha
