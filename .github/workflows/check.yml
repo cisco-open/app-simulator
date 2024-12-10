@@ -4,8 +4,8 @@ on:
     pull_request_target:
       branches: [ main ]
       paths:
-        - 'loaders/**'
-        - 'services/**'
+        - 'src/loaders/**'
+        - 'src/services/**'
         - '.version'
 
 jobs:
