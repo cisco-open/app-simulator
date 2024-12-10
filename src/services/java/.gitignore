@@ -4,3 +4,4 @@ target/maven-*
 extras/*.jar
 target/
 node.log
+javanode.iml

@@ -8,8 +8,8 @@ FROM openjdk:11-jre
 RUN mkdir -p /app/dependency-jars
 WORKDIR /app
 COPY --from=build /home/app/target /app/
-COPY entrypointk8s.sh /entrypointk8s.sh
+COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypointk8s.sh
 COPY extras/* /app/
 EXPOSE 8080
-CMD ["/entrypointk8s.sh"]
+CMD ["/entrypoint.sh"]
