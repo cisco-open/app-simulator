@@ -83,7 +83,7 @@
                 <configuration>
                     <mainClass>com.cisco.open.appsimulator.JavaNode</mainClass>
                     <arguments>
-                        <argument>9876</argument>
+                        <argument>8080</argument>
                     </arguments>
                 </configuration>
             </plugin>

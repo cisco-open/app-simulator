@@ -50,7 +50,7 @@ public class JavaNode {
 
                 logger.info("Reading AppConfig");
                 String envAppConfig = System.getenv("APP_CONFIG");
-
+                logger.info("Using config {}", envAppConfig);
                 if (envAppConfig == null) {
                         envAppConfig = "{\"endpoints\":{\"http\":{}}}";
                 }
@@ -64,25 +64,26 @@ public class JavaNode {
 
                 cache = cm.getCache("cache1");
 
-                logger.info("Starting Server");
+                logger.info("Starting Server on port {}", port);
                 Server server = new Server(port);
                 ServletHandler handler = new ServletHandler();
                 server.setHandler(handler);
                 logger.info("NodeServlet setConfig");
                 NodeServlet.setConfig(config);
-
+                logger.info("add Servlet mapping");
                 handler.addServletWithMapping(NodeServlet.class, "/*");
 
                 server.start();
+                logger.info("Join server");
                 server.join();
         }
 
-        @SuppressWarnings("serial")
+     //   @SuppressWarnings("serial")
         public static class NodeServlet extends HttpServlet {
                 protected static JsonObject config;
                 protected static JsonObject endpoints;
 
-                public static void setConfig(JsonObject configg) {
+                public static void setConfig(JsonObject config) {
                         NodeServlet.config = config;
                         NodeServlet.endpoints = config.getJsonObject("endpoints").getJsonObject("http");
                         logger.info("Config: {}", config.toString());
