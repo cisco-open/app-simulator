@@ -4,9 +4,9 @@ on:
   pull_request_target:
     branches: [main]
     paths:
-      - "src/loaders/**"
-      - "src/services/**"
-      - ".version"
+      - 'src/loaders/**'
+      - 'src/services/**'
+      - '.version'
 jobs:
   build:
     uses: ./.github/workflows/reusable-build-container-images.yml
