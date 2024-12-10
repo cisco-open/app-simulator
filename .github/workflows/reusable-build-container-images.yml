@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         image:
-          - context: ./loaders/curl
+          - context: ./src/loaders/curl
             name: loaders-curl
 
     steps:
