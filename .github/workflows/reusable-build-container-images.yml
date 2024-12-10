@@ -14,7 +14,7 @@ on:
         default: dev
       registry_ghcr:
         description: github container registry
-        default: 'ghcr.io/cisco-open/app-simulator'
+        default: "ghcr.io/cisco-open/app-simulator"
         required: false
         type: string
 jobs:
@@ -36,7 +36,8 @@ jobs:
         run: ./scripts/bumpversion.sh --patch
       - name: Read version from .version file
         id: version
-        run: echo "::set-output name=version::$(cat .version)"
+        run: |
+          {version}={$(cat .version)}" >> $GITHUB_OUTPUT
       - name: Log into GitHub Container Registry
         if: ${{ inputs.push }}
         uses: docker/login-action@v3

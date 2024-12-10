@@ -4,9 +4,9 @@ on:
   push:
     branches: [main]
     paths:
-      - 'src/loaders/**'
-      - 'src/services/**'
-      - '.version'
+      - "src/loaders/**"
+      - "src/services/**"
+      - ".version"
   workflow_dispatch:
 jobs:
   build:

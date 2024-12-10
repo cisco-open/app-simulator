@@ -2,8 +2,7 @@ package com.cisco.open.appsimulator;
 
 import java.io.IOException;
 
-public class HttpException extends IOException
-{
+public class HttpException extends IOException {
   protected int code;
 
   public HttpException(int code, String message) {
