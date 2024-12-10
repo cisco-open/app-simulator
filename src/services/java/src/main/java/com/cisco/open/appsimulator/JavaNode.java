@@ -39,7 +39,7 @@ public class JavaNode {
         public static void main(String[] args) throws Exception {
 
                 int port = 8080;
-                //CacheManager cacheManager;
+                // CacheManager cacheManager;
 
                 if (args.length > 0) {
                         port = Integer.parseInt(args[0]);
@@ -78,7 +78,7 @@ public class JavaNode {
                 server.join();
         }
 
-     //   @SuppressWarnings("serial")
+        // @SuppressWarnings("serial")
         public static class NodeServlet extends HttpServlet {
                 protected static JsonObject config;
                 protected static JsonObject endpoints;

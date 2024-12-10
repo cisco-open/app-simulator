@@ -1,0 +1,10 @@
+---
+extends: default
+
+rules:
+  line-length:
+    max: 200
+  truthy:
+    allowed-values: ['true', 'false', 'on'] # 'on' for GH action trigger
+  comments:
+    min-spaces-from-content: 1

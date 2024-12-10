@@ -1,35 +1,35 @@
 #!/bin/bash
 
 # File that stores the version string
-REPO_DIR=$(dirname $0)/..
+REPO_DIR=$(dirname "$0")/..
 VERSION_FILE="$REPO_DIR/.version"
 
 # Function to display help
 show_help() {
-    echo "Usage: bumpversion.sh [OPTION]"
-    echo "Modify or display the version string in the form of 'v{major}.{minor}.{patch}'."
-    echo "Stores the version in the file '$VERSION_FILE', defaults to v0.0.0 if it does not exist"
-    echo
-    echo "Options:"
-    echo "  --patch   Increase the patch number by 1."
-    echo "  --minor   Increase the minor number by 1 and reset patch to 0."
-    echo "  --major   Increase the major number by 1, reset minor to 0, reset patch to 0."
-    echo "  --help    Display this help message."
-    echo "  (no option) Display the current version."
+	echo "Usage: bumpversion.sh [OPTION]"
+	echo "Modify or display the version string in the form of 'v{major}.{minor}.{patch}'."
+	echo "Stores the version in the file '$VERSION_FILE', defaults to v0.0.0 if it does not exist"
+	echo
+	echo "Options:"
+	echo "  --patch   Increase the patch number by 1."
+	echo "  --minor   Increase the minor number by 1 and reset patch to 0."
+	echo "  --major   Increase the major number by 1, reset minor to 0, reset patch to 0."
+	echo "  --help    Display this help message."
+	echo "  (no option) Display the current version."
 }
 
 # Function to read the current version from the file
 get_version() {
-    if [ -f "$VERSION_FILE" ]; then
-        cat "$VERSION_FILE"
-    else
-        echo "v0.0.0"  # Default version if the file does not exist
-    fi
+	if [ -f "$VERSION_FILE" ]; then
+		cat "$VERSION_FILE"
+	else
+		echo "v0.0.0" # Default version if the file does not exist
+	fi
 }
 
 # Function to update the version in the file
 set_version() {
-    echo "$1" > "$VERSION_FILE"
+	echo "$1" >"$VERSION_FILE"
 }
 
 # Get the current version
@@ -38,37 +38,37 @@ current_version=$(get_version)
 # Extract major, minor, and patch numbers
 version_pattern='^v([0-9]+)\.([0-9]+)\.([0-9]+)$'
 if [[ $current_version =~ $version_pattern ]]; then
-    major=${BASH_REMATCH[1]}
-    minor=${BASH_REMATCH[2]}
-    patch=${BASH_REMATCH[3]}
+	major=${BASH_REMATCH[1]}
+	minor=${BASH_REMATCH[2]}
+	patch=${BASH_REMATCH[3]}
 else
-    echo "Invalid version format"
-    exit 1
+	echo "Invalid version format"
+	exit 1
 fi
 
 # Handle command-line arguments
 case "$1" in
-    --patch)
-        ((patch++))
-        ;;
-    --minor)
-        ((minor++))
-        patch=0
-        ;;
-    --major)
-        ((major++))
-        minor=0
-        patch=0
-        ;;
-    --help)
-        show_help
-        exit 0
-        ;;
-    *)
-        # No argument, just return the current version
-        echo "$current_version"
-        exit 0
-        ;;
+--patch)
+	((patch++))
+	;;
+--minor)
+	((minor++))
+	patch=0
+	;;
+--major)
+	((major++))
+	minor=0
+	patch=0
+	;;
+--help)
+	show_help
+	exit 0
+	;;
+*)
+	# No argument, just return the current version
+	echo "$current_version"
+	exit 0
+	;;
 esac
 
 # Construct the new version string

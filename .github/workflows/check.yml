@@ -1,16 +1,15 @@
+---
 name: Check container builds
-
 on:
-    pull_request_target:
-      branches: [ main ]
-      paths:
-        - 'src/loaders/**'
-        - 'src/services/**'
-        - '.version'
-
+  pull_request_target:
+    branches: [main]
+    paths:
+      - 'src/loaders/**'
+      - 'src/services/**'
+      - '.version'
 jobs:
-    build:
-        uses: ./.github/workflows/reusable-build-container-images.yml
-        with:
-            push: false
-            release_stream: dev
+  build:
+    uses: ./.github/workflows/reusable-build-container-images.yml
+    with:
+      push: false
+      release_stream: dev

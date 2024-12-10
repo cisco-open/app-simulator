@@ -17,7 +17,8 @@ to acknowledge your contributions.
 `app-simulator` leverages GitHub's private vulnerability reporting.
 
 To learn more about this feature and how to submit a vulnerability report,
-review [GitHub's documentation on private reporting](https://docs.github.com/code-security/security-advisories/guidance-on-reporting-and-writing-information-about-vulnerabilities/privately-reporting-a-security-vulnerability).
+review
+[GitHub's documentation on private reporting](https://docs.github.com/code-security/security-advisories/guidance-on-reporting-and-writing-information-about-vulnerabilities/privately-reporting-a-security-vulnerability).
 
 Here are some helpful details to include in your report:
 
@@ -30,9 +31,9 @@ A maintainer will acknowledge the report within three (3) business days, and
 will send a more detailed response within an additional three (3) business days
 indicating the next steps in handling your report.
 
-If you've been unable to successfully draft a vulnerability report via GitHub
-or have not received a response during the alloted response window, please
-reach out via the [Cisco Open security contact email](mailto:oss-security@cisco.com).
+If you've been unable to successfully draft a vulnerability report via GitHub or
+have not received a response during the alloted response window, please reach
+out via the [Cisco Open security contact email](mailto:oss-security@cisco.com).
 
 After the initial reply to your report, the maintainers will endeavor to keep
 you informed of the progress towards a fix and full announcement, and may ask

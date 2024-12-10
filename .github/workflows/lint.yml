@@ -1,0 +1,35 @@
+---
+name: lint
+on:
+  push:
+    # Run superlinter on pushes to default branch
+    branches:
+      - main
+  # Run superlinter on pull request events
+  pull_request_target:
+
+# Declare default permissions as read-only
+permissions: read-all
+
+jobs:
+  super-linter:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
+    steps:
+      - name: 🔒 harden runner
+        uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          fetch-depth: 0
+      - name: 🧹 run superlinter
+        uses: super-linter/super-linter@b92721f792f381cedc002ecdbb9847a15ece5bb8 # v7.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          YAML_CONFIG_FILE: '.yamllint.yml'
+          VALIDATE_ALL_CODEBASE: false
+          MULTI_STATUS: false

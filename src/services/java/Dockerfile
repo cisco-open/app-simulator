@@ -9,7 +9,7 @@ RUN mkdir -p /app/dependency-jars
 WORKDIR /app
 COPY --from=build /home/app/target /app/
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypointk8s.sh
+RUN chmod +x /entrypoint.sh
 COPY extras/* /app/
 EXPOSE 8080
 CMD ["/entrypoint.sh"]
