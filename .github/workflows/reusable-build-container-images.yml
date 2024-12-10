@@ -37,7 +37,7 @@ jobs:
       - name: Read version from .version file
         id: version
         run: |
-          {version}={$(cat .version)}" >> $GITHUB_OUTPUT
+          echo "version=$(cat .version)" >> $GITHUB_OUTPUT
       - name: Log into GitHub Container Registry
         if: ${{ inputs.push }}
         uses: docker/login-action@v3
