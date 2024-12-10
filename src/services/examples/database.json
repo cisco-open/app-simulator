@@ -1,1 +1,10 @@
-{"type":"mysql","databases":{"shop":{"carts":["id","name","value"],"customers":["id","name","email"]}},"name":"backend-db"}
+{
+  "type": "mysql",
+  "databases": {
+    "shop": {
+      "carts": ["id", "name", "value"],
+      "customers": ["id", "name", "email"]
+    }
+  },
+  "name": "backend-db"
+}
