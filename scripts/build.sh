@@ -2,10 +2,11 @@
 
 # Default values for parameters
 PUSH=
+REPO_DIR=$(dirname $0)/..
 #MacOSX M architecture: linux/arm64/v8
 PLATFORM="linux/amd64"
 IMAGE_PREFIX="app-simulator"
-VERSION=$(./bumpversion.sh)
+VERSION=$($REPO_DIR/scripts/bumpversion.sh)
 
 # Function to display help
 show_help() {
@@ -45,7 +46,7 @@ for ARG in "$@"; do
     esac
 done
 
-for DIR in services/*;
+for DIR in $REPO_DIR/src/services/*;
 do
   if [ -d $DIR ] ; then
     IMAGE_TAG="${IMAGE_PREFIX}/services-$(basename "$DIR"):$VERSION"
@@ -55,7 +56,7 @@ do
   fi
 done;
 
-for DIR in loaders/*;
+for DIR in $REPO_DIR/src/loaders/*;
 do
   if [ -d $DIR ] ; then
     IMAGE_TAG="${IMAGE_PREFIX}/loaders-$(basename "$DIR"):$VERSION"
