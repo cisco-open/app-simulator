@@ -6,6 +6,7 @@ REPO_DIR=$(dirname $0)/..
 #MacOSX M architecture: linux/arm64/v8
 PLATFORM="linux/amd64"
 IMAGE_PREFIX="app-simulator"
+REPO_PREFIX="cisco-open"
 VERSION=$($REPO_DIR/scripts/bumpversion.sh)
 
 # Function to display help
@@ -31,7 +32,7 @@ for ARG in "$@"; do
             shift
             ;;
         --repoprefix=*)
-            IMAGE_PREFIX="${ARG#*=}"
+            REPO_PREFIX="${ARG#*=}"
             shift
             ;;
         --help)
@@ -49,7 +50,7 @@ done
 for DIR in $REPO_DIR/src/services/*;
 do
   if [ -d $DIR ] ; then
-    IMAGE_TAG="${IMAGE_PREFIX}/services-$(basename "$DIR"):$VERSION"
+    IMAGE_TAG="${REPO_PREFIX}/${IMAGE_PREFIX}-services-$(basename "$DIR"):$VERSION"
     echo "Building $IMAGE_TAG..."
     echo "Running 'docker buildx build --platform $PLATFORM -t $IMAGE_TAG $DIR $PUSH'"
     docker buildx build --platform $PLATFORM -t $IMAGE_TAG $PUSH $DIR 
@@ -59,8 +60,7 @@ done;
 for DIR in $REPO_DIR/src/loaders/*;
 do
   if [ -d $DIR ] ; then
-    IMAGE_TAG="${IMAGE_PREFIX}/loaders-$(basename "$DIR"):$VERSION"
-    echo "Building $IMAGE_TAG..."
+    IMAGE_TAG="${REPO_PREFIX}/${IMAGE_PREFIX}-loaders-$(basename "$DIR"):$VERSION"
     echo "Building $IMAGE_TAG..."
     echo "Running 'docker buildx build --platform $PLATFORM -t $IMAGE_TAG $DIR $PUSH'"
     docker buildx build --platform $PLATFORM -t $IMAGE_TAG $PUSH $DIR $PUSH

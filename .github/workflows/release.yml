@@ -1,0 +1,13 @@
+name: Build and publish release container images
+
+on:
+    release:
+        types: [published]
+
+jobs:
+    build:
+        uses: ./.github/workflows/reusable-build-container-images.yml
+        with:
+            push: true
+            release_stream: latest
+        secrets: inherit
