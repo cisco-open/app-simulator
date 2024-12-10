@@ -38,6 +38,7 @@ jobs:
         id: version
         run: echo "::set-output name=version::$(cat .version)"
       - name: Log into GitHub Container Registry
+        if: ${{ inputs.push }}
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
