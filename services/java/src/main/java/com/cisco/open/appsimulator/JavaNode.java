@@ -188,7 +188,7 @@ public class JavaNode {
                                 throws IOException {
                         logger.info("Processing call: {}", call);
                         if (call.startsWith("sleep")) {
-                                int timeout = Integer.parseInt(call.split(",")[1]);
+                                int timeout = Integer.parseInt(call.split(",")[1].trim());
                                 try {
                                         Thread.sleep(timeout);
                                 } catch (InterruptedException e) {
