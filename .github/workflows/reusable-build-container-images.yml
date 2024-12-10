@@ -33,7 +33,7 @@ jobs:
         # This way we make sure that released versions are fixed to their version
         # and that 'dev' or other non stable releases do not overwrite.
         if: ${{ inputs.release_stream != 'latest' }}
-        run: ./bumpversion.sh --build
+        run: ./scripts/bumpversion.sh --patch
       - name: Read version from .version file
         id: version
         run: echo "::set-output name=version::$(cat .version)"
