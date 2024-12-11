@@ -1,0 +1,42 @@
+2024-12-06 17:03:20,300 [56463] [null] DEBUG default - ::1 - "GET / HTTP/1.1" 404 3  "curl/8.7.1" - 6.077 ms
+2024-12-06 17:03:42,820 [56463] [null] WARN default - do some logging
+2024-12-06 17:03:42,824 [56463] [null] INFO default - more logging
+2024-12-06 17:03:42,830 [56463] [null] ERROR default - undefined
+2024-12-06 17:03:42,832 [56463] [null] DEBUG default - ::1 - "GET /data HTTP/1.1" 500 -  "curl/8.7.1" - 65.752 ms
+2024-12-06 17:04:08,210 [56463] [null] WARN default - do some logging
+2024-12-06 17:04:08,210 [56463] [null] INFO default - more logging
+2024-12-06 17:04:08,210 [56463] [null] ERROR default - undefined
+2024-12-06 17:04:08,211 [56463] [null] DEBUG default - ::1 - "GET /data HTTP/1.1" 500 -  "curl/8.7.1" - 52.630 ms
+2024-12-06 17:04:24,577 [56463] [null] WARN default - do some logging
+2024-12-06 17:04:24,577 [56463] [null] INFO default - more logging
+2024-12-06 17:04:24,578 [56463] [null] ERROR default - undefined
+2024-12-06 17:04:24,579 [56463] [null] DEBUG default - ::1 - "GET /data HTTP/1.1" 500 -  "curl/8.7.1" - 53.679 ms
+2024-12-06 17:04:33,199 [56463] [null] WARN default - do some logging
+2024-12-06 17:04:33,199 [56463] [null] INFO default - more logging
+2024-12-06 17:04:33,199 [56463] [null] ERROR default - undefined
+2024-12-06 17:04:33,200 [56463] [null] DEBUG default - ::1 - "GET /data HTTP/1.1" 500 -  "curl/8.7.1" - 52.676 ms
+2024-12-06 17:05:41,114 [58520] [null] INFO default - Request Headers: {
+  host: 'localhost:8080',
+  'user-agent': 'curl/8.7.1',
+  accept: '*/*',
+  header: 'test'
+}
+2024-12-06 17:05:41,169 [58520] [null] WARN default - do some logging
+2024-12-06 17:05:41,169 [58520] [null] INFO default - more logging
+2024-12-06 17:05:41,170 [58520] [null] ERROR default - undefined
+2024-12-06 17:05:41,172 [58520] [null] DEBUG default - ::1 - "GET /data HTTP/1.1" 500 -  "curl/8.7.1" - 57.056 ms
+2024-12-06 17:07:21,154 [58520] [null] INFO default - Request Headers: {
+  host: 'localhost:8080',
+  'user-agent': 'curl/8.7.1',
+  accept: '*/*',
+  header: 'test'
+}
+2024-12-06 17:07:21,164 [58520] [null] ERROR default - Error: connect ECONNREFUSED ::1:8000
+2024-12-06 17:07:21,166 [58520] [null] DEBUG default - ::1 - "GET /test HTTP/1.1" 500 36  "curl/8.7.1" - 12.082 ms
+2024-12-06 17:12:53,989 [63919] [null] INFO default - Request Headers: {
+  host: 'localhost:8080',
+  'user-agent': 'curl/8.7.1',
+  accept: '*/*',
+  header: 'test'
+}
+2024-12-06 17:12:54,530 [63919] [null] DEBUG default - ::1 - "GET /healthz HTTP/1.1" 200 25  "curl/8.7.1" - 539.643 ms
