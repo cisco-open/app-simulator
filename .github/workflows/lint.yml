@@ -32,7 +32,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: '.'
-          YAML_CONFIG_FILE: '.yamllint.yml'
+          YAML_CONFIG_FILE: '.yamllint'
           VALIDATE_GIT_COMMITLINT: false
           VALIDATE_ALL_CODEBASE: false
           MULTI_STATUS: false
