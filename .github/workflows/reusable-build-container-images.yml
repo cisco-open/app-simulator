@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
+        fail-fast: false
         image:
           - context: ./src/loaders/curl
             name: loaders-curl
