@@ -1,6 +1,6 @@
 FROM alpine:3.20.3
 
-LABEL org.opencontainers.image.source https://github.com/cisco-open/app-simulator
+LABEL org.opencontainers.image.source=https://github.com/cisco-open/app-simulator
 LABEL org.opencontainers.image.description="curl loader for app-simulator"
 LABEL org.opencontainers.image.licenses=BSD-3-Clause
 

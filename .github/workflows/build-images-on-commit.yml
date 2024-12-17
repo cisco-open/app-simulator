@@ -6,6 +6,7 @@ on:
     paths:
       - "src/loaders/**"
       - "src/services/**"
+      - "src/databases/**"
       - ".version"
       - ".github/workflows/reusable-build-container-images.yml"
       - ".github/workflows/build-images-on-commit.yml"
