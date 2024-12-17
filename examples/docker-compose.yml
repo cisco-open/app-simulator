@@ -2,7 +2,7 @@ services:
   frontend:
     image: ghcr.io/cisco-open/app-simulator-services-java:latest
     build:
-      context: ../../src/services/java
+      context: ../src/services/java
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -11,7 +11,7 @@ services:
   backend:
     image: ghcr.io/cisco-open/app-simulator-services-java:latest
     build:
-      context: ../../src/services/java
+      context: ../src/services/java
       dockerfile: Dockerfile
     ports:
       - "8090:8080"
@@ -20,7 +20,7 @@ services:
   ext-payment:
     image: ghcr.io/cisco-open/app-simulator-services-java:latest
     build:
-      context: ../../src/services/java
+      context: ../src/services/java
       dockerfile: Dockerfile
     ports:
       - "8091:8080"
@@ -34,7 +34,7 @@ services:
   loader:
     image: ghcr.io/cisco-open/app-simulator-loaders-curl:latest
     build:
-      context: ../../src/loaders/curl
+      context: ../src/loaders/curl
       dockerfile: Dockerfile
     environment:
       - URLS=https://frontend:8080/addtocart http://frontend:8080/checkout
