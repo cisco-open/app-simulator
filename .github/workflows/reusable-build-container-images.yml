@@ -7,11 +7,6 @@ on:
         default: false
         required: false
         type: boolean
-      release_stream:
-        type: string
-        description: Set the release stream (latest, dev, ...)
-        required: false
-        default: dev
       registry_ghcr:
         description: github container registry
         default: "ghcr.io/cisco-open/app-simulator"
@@ -30,16 +25,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
-      - name: Bump version
-        # Only bump the version if the release stream is not 'latest'
-        # This way we make sure that released versions are fixed to their version
-        # and that 'dev' or other non stable releases do not overwrite.
-        if: ${{ inputs.release_stream != 'latest' }}
-        run: ./scripts/bumpversion.sh --patch
       - name: Read version from .version file
         id: version
         run: |
           echo "version=$(cat .version)" >> $GITHUB_OUTPUT
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ inputs.registry_ghcr }}-${{ matrix.image.name }} # e.g. ghcr.io/cisco-open/app-simulator-loaders-curl
+          # build nightly releases on schedule
+          # build semver releases on tag
+          # build edge releases on main branch
+          tags: |
+            type=schedule,pattern={{date 'YYYYMMDD'}} 
+            type=semver,pattern={{ version }}
+            type=edge,branch=main
+          labels: |
+
       - name: Log into GitHub Container Registry
         if: ${{ inputs.push }}
         uses: docker/login-action@v3
@@ -59,8 +62,8 @@ jobs:
           context: ${{ matrix.image.context }}
           platforms: linux/amd64,linux/arm64
           push: ${{ inputs.push }}
-          tags: |
-            ${{ inputs.registry_ghcr }}-${{ matrix.image.name }}:${{ steps.version.outputs.version }}
-            ${{ inputs.registry_ghcr }}-${{ matrix.image.name }}:${{ inputs.release_stream }}
           cache-from: type=gha
           cache-to: type=gha
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
