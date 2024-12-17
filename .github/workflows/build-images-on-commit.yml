@@ -13,5 +13,4 @@ jobs:
     uses: ./.github/workflows/reusable-build-container-images.yml
     with:
       push: true
-      release_stream: dev
     secrets: inherit
