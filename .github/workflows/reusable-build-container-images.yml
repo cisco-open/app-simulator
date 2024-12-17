@@ -9,7 +9,7 @@ on:
         type: boolean
       registry_ghcr:
         description: github container registry
-        default: 'ghcr.io/cisco-open/app-simulator'
+        default: "ghcr.io/cisco-open/app-simulator"
         required: false
         type: string
 jobs:
@@ -20,6 +20,8 @@ jobs:
         image:
           - context: ./src/loaders/curl
             name: loaders-curl
+          - context: ./src/services/java
+            name: services-java
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2

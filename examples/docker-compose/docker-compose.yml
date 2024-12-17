@@ -1,0 +1,53 @@
+services:
+  frontend:
+    image: ghcr.io/cisco-open/app-simulator-services-java:latest
+    build:
+      context: ../../src/services/java
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend.json:/config.json
+  backend:
+    image: ghcr.io/cisco-open/app-simulator-services-java:latest
+    build:
+      context: ../../src/services/java
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8080"
+    volumes:
+      - ./backend.json:/config.json
+  ext-payment:
+    image: ghcr.io/cisco-open/app-simulator-services-java:latest
+    build:
+      context: ../../src/services/java
+      dockerfile: Dockerfile
+    ports:
+      - "8091:8080"
+    volumes:
+      - ./ext-payment.json:/config.json
+    networks:
+      default:
+        aliases:
+          - ext-payment-1
+          - ext-payment-2
+  loader:
+    image: ghcr.io/cisco-open/app-simulator-loaders-curl:latest
+    build:
+      context: ../../src/loaders/curl
+      dockerfile: Dockerfile
+    environment:
+      - URLS=https://frontend:8080/addtocart http://frontend:8080/checkout
+      - SLEEP=5
+      - WAIT=1
+#  backend-db:
+#    image: ghcr.io/cisco-open/app-simulator-databases-mysql:latest
+#    build:
+#      context: ../src/databases/mysql
+#      dockerfile: Dockerfile
+#    ports:
+#      - "3306:3306"
+#    volumes:
+#     - ./backend-db.json:/config.json
+networks:
+  default:
