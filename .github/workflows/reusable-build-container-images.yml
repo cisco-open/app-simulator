@@ -22,6 +22,8 @@ jobs:
             name: loaders-curl
           - context: ./src/services/java
             name: services-java
+          - context: ./src/services/nodejs
+            name: services-nodejs
           - context: ./src/databases/mysql
             name: databases-mysql
     steps:
