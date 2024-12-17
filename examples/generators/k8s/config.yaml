@@ -1,0 +1,42 @@
+services:
+  service-a:
+    type: java
+    endpoints:
+      http:
+        /call/a:
+          - slow,256
+        /call/b:
+          - http://service-b/call/b
+        /call/c:
+          - http://service-b/call/c
+  service-b:
+    type: java
+    endpoints:
+      http:
+        /call/error:
+          - slow,256
+        /call/b:
+          - slow,256
+        /call/c:
+          - http://service-c/call/c
+  service-c:
+    type: java
+    endpoints:
+      http:
+        /call/error:
+          - slow,256
+          - call: error,500,Oops
+            probability: 0.5
+        /call/c:
+          - slow,256
+loaders:
+  browser:
+    type: curl
+    wait: 15
+    count: 5
+    urls:
+      - http://service-a/call/a
+      - http://service-a/call/b
+      - http://service-a/call/c
+      - http://service-b/call/error
+      - http://service-c/call/error

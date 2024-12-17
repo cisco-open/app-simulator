@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ service_name }}
+spec:
+  selector:
+    app: {{ service_name }}
+  ports:
+    - protocol: TCP
+{%- if service_type == 'mysql' %}
+      targetPort: 3306
+      port: 3306
+{%- elif service_type == 'mongo' %}   
+      targetPort: 27017
+      port: 27017
+{%- endif %}
+  type: ClusterIP

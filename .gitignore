@@ -5,3 +5,5 @@
 
 # Built Visual Studio Code Extensions
 *.vsix
+# Ignore local venv environment
+.venv

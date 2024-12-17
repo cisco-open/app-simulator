@@ -1,0 +1,86 @@
+services:
+  service-a:
+    type: java
+    endpoints:
+      http:
+        /a:
+          - http://service-b/a
+        /b:
+          - http://service-b/b
+        /c:
+          - http://service-b/c
+        /d: 
+          - slow,1024
+          - call: error,500,Oops
+            probability: 0.5
+  service-b:
+    type: java
+    endpoints:
+      http:
+        /a:
+          - http://service-b2/a
+        /b:
+          - http://service-b2/b
+          - http://service-x/x
+        /c:
+          - http://service-b2/c
+  service-b2:
+    type: java
+    endpoints:
+      http:
+        /a:
+          - slow,1024
+          - call: error,500,Oops
+            probability: 0.5
+        /b:
+          - slow,524
+          - call: error,500,Oops
+            probability: 0.5
+          - http://service-x/x
+        /c:
+          - http://service-c/a
+          - http://service-c/b
+          - http://service-c/c
+  service-c:
+    type: java
+    endpoints:
+      http:
+        /a:
+          - slow,2048
+          - call: error,500,Oops
+            probability: 0.9
+        /b:
+          - slow,1024
+          - call: error,500,Oops
+            probability: 0.5
+        /c:
+          - slow,256
+          - call: error,500,Oops
+            probability: 0.1
+          - http://service-d/d
+  service-d:
+    type: java
+    endpoints:
+      http:
+        /d:
+          - slow,256
+          - veryslow,1024
+  service-x:
+    type: java
+    endpoints:
+      http:
+        /x:
+          - http://service-b2/b
+          - call: error,500,Oops
+            probability: 0.1
+loaders:
+  browser:
+    type: curl
+    wait: 15
+    count: 5
+    urls:
+      - http://service-a/a
+      - http://service-a/b
+      - http://service-a/c
+      - http://service-a/d
+      - http://service-c/d

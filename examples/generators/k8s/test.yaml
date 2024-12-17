@@ -1,0 +1,97 @@
+k8s:
+  appName: "DemoApp"
+  serviceAnnotations:
+    a: serviceValueGlobalA
+    b: serviceValueGlobalB
+  deploymentAnnotations:
+    a: deploymentValueGlobalA
+    b: deploymentValueGlobalB
+  # may contain as well the registry information  
+  imageNamePrefix: astoklas177/
+services:
+  web-frontend-java:
+    type: java
+    port: 8888
+    serviceAnnotations:
+      a: serviceGlobalA
+      b: serviceGlobalB
+    deploymentAnnotations:
+      a: deploymentGlobalA
+      b: deploymentGlobalB
+    endpoints:
+      http:
+        /login:
+          - http://accountservices-dotnet/account/login
+        /homepage:
+          - http://accountservices-dotnet/account/home
+          - cache,128
+        /logout:
+          - http://accountservices-dotnet/account/logout
+          - sql://policiesdb/policy?query=INSERT INTO policies(customer,coverage) VALUES('test',546)        
+        /healthz:
+          - slow,1024
+  accountservices-dotnet:
+    type: dotnet
+    serviceAnnotations:
+      a: serviceGlobalA
+      b: serviceGlobalB
+    deploymentAnnotations:
+      a: deploymentGlobalA
+      b: deploymentGlobalB
+    endpoints:
+      http:
+        /account/login:
+          - slow,323
+          - http://apiservice-nodejs/test
+        /account/home:
+          - slow,524
+          - call: error,500,Oops
+            probability: 0.3
+        /account/logout:
+          - slow,256
+          - sql://policiesdb/policy?query=INSERT INTO policies(customer,coverage) VALUES('test',123)
+        /healthz:
+          - slow,1024
+  apiservice-nodejs:
+    type: nodejs    
+    serviceAnnotations:
+      a: serviceGlobalA
+      b: serviceGlobalB
+    deploymentAnnotations:
+      a: deploymentGlobalA
+      b: deploymentGlobalB
+    endpoints:
+      http:
+        /test:
+          - slow,323
+        /healthz:
+          - slow,524
+  policiesdb:
+    type: mysql
+    serviceAnnotations:
+      a: serviceGlobalA
+      b: serviceGlobalB
+    deploymentAnnotations:
+      a: deploymentGlobalA
+      b: deploymentGlobalB
+    databases:
+      policy:
+        policies: [id, customer, coverage]
+  sessiondb:
+    type: mongo
+    serviceAnnotations:
+      a: serviceGlobalA
+      b: serviceGlobalB
+    deploymentAnnotations:
+      a: deploymentGlobalA
+      b: deploymentGlobalB
+loaders:
+  browser:
+    type: curl
+    wait: 15
+    sleep: .5
+    count: 5
+    urls:
+      - http://web-frontend-java/login
+      - http://web-frontend-java/homepage
+      - http://web-frontend-java/logout
