@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ service_name }}-loader
+  labels:
+    app: {{ service_name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ service_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ service_name }}
+    spec:
+      containers:
+      - name: loader-container
+{%- if service_type == 'curl' %}
+        image: astoklas177/apmgamek8s:curl
+        env:
+          - name: URLS
+            value: {{ urls }}
+          - name: WAIT
+            value: "{{ wait }}"
+          - name: SLEEP
+            value: "{{ sleep }}"
+{%- else %}
+        image: astoklas177/apmgamek8s:curl
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: root
+{%- endif %}
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "300m"
+          requests:
+            memory: "128Mi"
+            cpu: "150m"
+

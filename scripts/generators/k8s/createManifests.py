@@ -81,6 +81,7 @@ if isinstance(yaml_data, dict):
     for key, value in yaml_data.items():
         if key== "k8s":
             print("Reading properties for k8s")
+            print(f"Value: {value}")
         elif key == "services":
             #print(f"Value: {value}")
             for service, config in value.items():
@@ -116,6 +117,16 @@ if isinstance(yaml_data, dict):
                         write_yaml(f"./deployments/{loader}-deployment.yaml", rendered_yaml)
                 else:
                     print(f"Unsupported loader type detected {config['type']} named {loader}")
+        elif key == "databases":
+            for service, config in value.items():
+                config['agent'] = False
+                if config['type'] in db_services:
+                    print(f"create DB Service of type {config['type']} named {service}")
+                    write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=0,service_ext_port=0,service_type=config['type']))
+                    write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
+                    write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))
+                else:
+                    print(f"Unsupported service type detected {config['type']} named {service}")
         else:
             print(f"found unsupported key {key} in config - ignoring")
 else:

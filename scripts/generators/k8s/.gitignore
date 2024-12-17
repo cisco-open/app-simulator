@@ -1,2 +1,3 @@
 deployments/*
 !deployments/.gitkeep
+config.yaml
