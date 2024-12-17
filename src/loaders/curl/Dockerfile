@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.source https://github.com/cisco-open/app-simulato
 LABEL org.opencontainers.image.description="curl loader for app-simulator"
 LABEL org.opencontainers.image.licenses=BSD-3-Clause
 
-RUN apk add --no-cache curl=8.11.0-r2 util-linux=2.40.1-r1
+RUN apk add --no-cache curl util-linux
 WORKDIR /usr/bin/
 COPY loader.sh /usr/bin
 RUN chmod +x /usr/bin/loader.sh
