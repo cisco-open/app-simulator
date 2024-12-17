@@ -10,7 +10,8 @@ on:
 jobs:
   create_tag:
     runs-on: ubuntu-24.04
-
+    permissions:
+      contents: write
     steps:
     # Checkout the repository
     - name: Checkout repository
@@ -29,6 +30,7 @@ jobs:
 
     # Create a tag with the version
     - name: Create and push tag
+
       env:
         GITHUB_TOKEN: ${{ secrets.CISCO_SERVICE_GITHUB_AUTOMATION_TOKEN }}
       run: |
