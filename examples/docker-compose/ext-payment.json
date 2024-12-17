@@ -1,0 +1,13 @@
+{
+  "type": "java",
+  "endpoints": {
+    "http": {
+      "/pay": [
+        "sleep,50",
+        "log,warn,do some logging",
+        "log,more logging",
+      ]
+    }
+  },
+  "name": "ext-payment"
+}

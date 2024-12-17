@@ -4,14 +4,16 @@ on:
   push:
     branches: [main]
     paths:
-      - 'src/loaders/**'
-      - 'src/services/**'
-      - '.version'
+      - "src/loaders/**"
+      - "src/services/**"
+      - "src/databases/**"
+      - ".version"
+      - ".github/workflows/reusable-build-container-images.yml"
+      - ".github/workflows/build-images-on-commit.yml"
   workflow_dispatch:
 jobs:
   build:
     uses: ./.github/workflows/reusable-build-container-images.yml
     with:
       push: true
-      release_stream: dev
     secrets: inherit

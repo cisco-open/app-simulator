@@ -1,0 +1,11 @@
+---
+name: Build and publish nightly container images
+on:
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  build:
+    uses: ./.github/workflows/reusable-build-container-images.yml
+    with:
+      push: true
+    secrets: inherit
