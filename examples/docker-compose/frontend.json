@@ -1,5 +1,5 @@
 {
-  "type": "nodejs",
+  "type": "java",
   "options": {
     "connectionDelay": 500,
     "httpLibrary": "request-promise"
@@ -9,7 +9,7 @@
       "/logo.png": ["sleep,1000"],
       "/script.js": ["sleep,5000"],
       "/checkout": [
-        "http://backend/cart/checkout",
+        "http://backend:8080/cart/checkout",
         "image,logo.png",
         "script,script.js",
         "ajax,cache"
