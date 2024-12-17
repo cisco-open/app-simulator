@@ -12,8 +12,6 @@ on:
 jobs:
   create_tag:
     runs-on: ubuntu-24.04
-    permissions:
-      contents: write
     steps:
     # Checkout the repository
     - name: Checkout repository
