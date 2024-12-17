@@ -2,6 +2,7 @@ name: Create Tag from .version File
 permissions: read-all
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - ".version"  # Trigger only when the .version file changes
