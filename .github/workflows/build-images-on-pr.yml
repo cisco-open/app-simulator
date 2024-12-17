@@ -6,7 +6,6 @@ on:
     paths:
       - "src/loaders/**"
       - "src/services/**"
-      - ".version"
       - ".github/workflows/reusable-build-container-images.yml"
       - ".github/workflows/check.yml"
 jobs:
