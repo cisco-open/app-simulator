@@ -22,6 +22,8 @@ jobs:
             name: loaders-curl
           - context: ./src/services/java
             name: services-java
+          - context: ./src/databases/mysql
+            name: databases-mysql
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
