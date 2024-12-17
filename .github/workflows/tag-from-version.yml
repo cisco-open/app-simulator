@@ -1,0 +1,35 @@
+name: Create Tag from .version File
+permissions: read-all
+
+on:
+  push:
+    paths:
+      - ".version"  # Trigger only when the .version file changes
+
+jobs:
+  create_tag:
+    runs-on: ubuntu-24.04
+
+    steps:
+    # Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v4.2.2
+
+    # Read the content of the .version file
+    - name: Read version from .version file
+      id: read_version
+      run: |
+        if [ ! -f .version ]; then
+          echo "The .version file does not exist."
+          exit 1
+        fi
+        version=$(cat .version | tr -d '[:space:]')
+        echo "version=$version" >> $GITHUB_ENV
+
+    # Create a tag with the version
+    - name: Create and push tag
+      env:
+        GITHUB_TOKEN: ${{ secrets.CISCO_SERVICE_GITHUB_AUTOMATION_TOKEN }}
+      run: |
+        git tag $version
+        git push origin $version
