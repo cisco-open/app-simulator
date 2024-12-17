@@ -12,6 +12,8 @@ on:
 jobs:
   create_tag:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
     steps:
     # Checkout the repository
     - name: Checkout repository
@@ -36,6 +38,5 @@ jobs:
       run: |
         git config user.name cisco-service
         git config user.email 111539563+cisco-service@users.noreply.github.com
-        git remote set-url origin https://${GH_TOKEN}@github.com/${{ github.repository }}
         git tag $version
         git push origin $version
