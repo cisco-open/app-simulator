@@ -6,6 +6,8 @@ on:
   push:
     paths:
       - ".version"  # Trigger only when the .version file changes
+    branches:
+      - main
 
 jobs:
   create_tag:
