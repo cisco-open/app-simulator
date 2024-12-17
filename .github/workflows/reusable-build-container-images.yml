@@ -14,7 +14,7 @@ on:
         default: dev
       registry_ghcr:
         description: github container registry
-        default: 'ghcr.io/cisco-open/app-simulator'
+        default: "ghcr.io/cisco-open/app-simulator"
         required: false
         type: string
 jobs:
