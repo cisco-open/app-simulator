@@ -30,13 +30,18 @@ jobs:
         version=$(cat .version | tr -d '[:space:]')
         echo "version=$version" >> $GITHUB_ENV
 
+    - name: Configure git
+      run: |
+        # Set up Git with an identifiable user
+        git config --global user.name cisco-service
+        git config --global user.email 111539563+cisco-service@users.noreply.github.com
+
     # Create a tag with the version
     - name: Create and push tag
-
       env:
         GH_TOKEN: ${{ secrets.CISCO_SERVICE_GITHUB_AUTOMATION_TOKEN }}
       run: |
-        git config user.name cisco-service
-        git config user.email 111539563+cisco-service@users.noreply.github.com
-        git tag $version
+        # Add a custom tag message
+        tag_message="Tag created by ${{ github.actor }} via GitHub Actions."
+        git tag -a "$version" -m "$tag_message"
         git push origin $version
