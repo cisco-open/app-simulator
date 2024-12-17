@@ -7,7 +7,6 @@ on:
       - "src/loaders/**"
       - "src/services/**"
       - "src/databases/**"
-      - ".version"
       - ".github/workflows/reusable-build-container-images.yml"
       - ".github/workflows/check.yml"
 jobs:
