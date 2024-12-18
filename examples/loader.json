@@ -1,0 +1,8 @@
+{
+   "sleep" : 5,
+   "urls" : [
+      "https://frontend:8080/addtocart",
+      "http://frontend:8080/checkout"
+   ],
+   "wait" : 1
+}
