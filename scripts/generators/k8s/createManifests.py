@@ -154,11 +154,11 @@ def main():
                             write_yaml(f"./deployments/{service}-service.yaml",renderService2(key,config,service))
                         else:
                             write_yaml(f"./deployments/{service}-service.yaml",renderService2(key,config,service))
-                    elif config['type'] in db_services:
-                        print(f"create DB Service of type {config['type']} named {service}")
-                        write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/db-service.yaml.tmpl",service_name=service,service_port=0,service_ext_port=0,service_type=config['type']))
-                        write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
-                        write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/db-deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))
+#                    elif config['type'] in db_services:
+#                        print(f"create DB Service of type {config['type']} named {service}")
+#                        write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/db-service.yaml.tmpl",service_name=service,service_port=0,service_ext_port=0,service_type=config['type']))
+#                        write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
+#                        write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/db-deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))
                     else:
                         print(f"Unsupported service type detected {config['type']} named {service}")
             elif key == "loaders":
