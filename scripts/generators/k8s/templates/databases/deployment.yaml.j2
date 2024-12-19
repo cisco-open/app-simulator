@@ -6,7 +6,7 @@ metadata:
     app: {{ appName|default('AppSimulatorApp') }}
     service: {{ serviceName }}
 spec:
-  replicas: 1
+  replicas: {{ instances|default('1') }}
   selector:
     matchLabels:
       app: {{ appName|default('AppSimulatorApp') }}

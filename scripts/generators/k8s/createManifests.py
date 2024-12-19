@@ -42,8 +42,8 @@ def renderDeployment(templ, service_name, service_type, service_port):
 def renderDeployment2(templ_type, config, serviceName):
     with open(f"./templates/{templ_type}/deployment.yaml.j2", 'r') as file:
         config.update(serviceName=serviceName)
-        print(f"Rendering Deployment {serviceName}")
-        print(json.dumps(config, indent=2))
+        #print(f"Rendering Deployment {serviceName}")
+        #print(json.dumps(config, indent=2))
         template = Template(file.read())
         rendered_yaml = yaml.safe_load(template.render(config))
         return rendered_yaml 
@@ -51,25 +51,25 @@ def renderDeployment2(templ_type, config, serviceName):
 def renderService2(templ_type, config, serviceName):
     with open(f"./templates/{templ_type}/service.yaml.j2", 'r') as file:
         config.update(serviceName=serviceName)
-        print(f"Rendering Service {serviceName}")
-        print(json.dumps(config, indent=2))
+        #print(f"Rendering Service {serviceName}")
+        #print(json.dumps(config, indent=2))
         template = Template(file.read())
         rendered_yaml = yaml.safe_load(template.render(config))
-        print(f"Rendered Template:\n{yaml.dump(rendered_yaml)}")
+        #print(f"Rendered Template:\n{yaml.dump(rendered_yaml)}")
         return rendered_yaml     
 
 def renderConfigMap2(templ_type, config, serviceName):
     with open(f"./templates/{templ_type}/configmap.yaml.j2", 'r') as file:
         config.update(serviceName=serviceName)
-        print(f"Rendering ConfigMap {serviceName}")
-        print(json.dumps(config, indent=2))
+        #print(f"Rendering ConfigMap {serviceName}")
+        #print(json.dumps(config, indent=2))
         context = {
             'serviceName': serviceName, 
             'serviceConfig': json.dumps(config), 
         }
         template = Template(file.read())
         rendered_yaml = yaml.safe_load(template.render(context))
-        print(f"Rendered Template:\n{yaml.dump(rendered_yaml)}")
+        #print(f"Rendered Template:\n{yaml.dump(rendered_yaml)}")
         return rendered_yaml   
 
 def merge_dicts(dict1, dict2):
@@ -136,11 +136,11 @@ def main():
         globalConfig = yaml_data.get("global", {})
         keys_to_keep = {  "appName","imageNamePrefix","k8s"} 
         gconfig = {key: globalConfig[key] for key in keys_to_keep if key in globalConfig}
+        #print(f"gconfig: gconfig")
         globalConfigK8s = gconfig.get("k8s", {})
+        #print("k8sconfig: {globalConfigK8s}")
         gconfig.pop("k8s", None)
         globalConfig = merge_dicts(gconfig, globalConfigK8s)
-#
-#
         yaml_data.pop("global", None)
         print(f"Global Config:\n", json.dumps(globalConfig, indent=2))
         for key, value in yaml_data.items():
@@ -149,6 +149,7 @@ def main():
                 for service, config in value.items():
                     config['agent'] = False
                     if config['type'] in application_services:
+                        config=merge_dicts(globalConfig, config)
                         print(f"create Appplication Service of type {config['type']} named {service}") 
                         write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap2(key, config, service))
                         write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment2(key,config, service))
@@ -167,23 +168,28 @@ def main():
                 for loader, config in value.items():
                     if config['type'] in loader_services:
                         print (f"create loader service of type {config['type']} named {loader}")
-                        with open('./templates/curl-deployment.yaml.tmpl', 'r') as file:
-                            template = Template(file.read())
-                            context = {
-                                'service_name': loader, 
-                                'service_type': config['type'],
-                                'urls': " ".join(config['urls']),
-                                'wait': config.get('wait',15),
-                                'sleep': config.get('sleep',0.1)
-                                }
-                            rendered_yaml = yaml.safe_load(template.render(context))
-                            write_yaml(f"./deployments/{loader}-deployment.yaml", rendered_yaml)
+                        config=merge_dicts(globalConfig, config)
+#                        with open('./templates/curl-deployment.yaml.tmpl', 'r') as file:
+#                            template = Template(file.read())
+                        context = {
+                            'serviceName': loader, 
+                            'type': config['type'],
+                            'urls': " ".join(config['urls']),
+                            'wait': config.get('wait',15),
+                            'sleep': config.get('sleep',0.1)
+                            }
+#                            rendered_yaml = yaml.safe_load(template.render(context))
+#                            write_yaml(f"./deployments/{loader}-deployment.yaml", rendered_yaml)
+                        write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap2(key, config, service))
+                        write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment2(key, context, service))
+                        # There is no need to create a service for a loadgenerator at this point in time
                     else:
                         print(f"Unsupported loader type detected {config['type']} named {loader}")
             elif key == "databases":
                 for service, config in value.items():
                     config['agent'] = False
                     if config['type'] in db_services:
+                        config=merge_dicts(globalConfig, config)
                         print(f"create DB Service of type {config['type']} named {service}")
                         write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap2(key, config, service))
                         write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment2(key,config, service))
@@ -203,6 +209,7 @@ def main():
                 print(f"found unsupported key {key} in config - try rendering deployment, service and configmap")
                 try :
                     for service, config in value.items():
+                        config=merge_dicts(globalConfig, config)
                         write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap2(key, config, service))
                         write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment2(key,config, service))
                         write_yaml(f"./deployments/{service}-service-ext.yaml",renderService2(key, config, service))

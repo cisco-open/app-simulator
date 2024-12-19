@@ -3,6 +3,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ serviceName }}-ext
+{%- if serviceAnnotations %}
+  annotations:
+{%- for k,v in serviceAnnotations.items() %}   
+    {{ k }}: {{v}}
+{% endfor %}   
+{% endif %}
 spec:
   selector:
     app: {{ appName|default('AppSimulatorApp') }}
@@ -17,6 +23,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ serviceName }}
+{%- if serviceAnnotations %}
+  annotations:
+{%- for k,v in serviceAnnotations.items() %}   
+    {{ k }}: {{v}}
+{% endfor %}   
+{% endif %}
 spec:
   selector:
     app: {{ appName|default('AppSimulatorApp') }}

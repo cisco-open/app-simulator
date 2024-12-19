@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ serviceName }}-loader
+  labels:
+    app: {{ appName|default('AppSimulatorApp') }}
+    service: {{ serviceName }}
+  {%- if deploymentAnnotations %}
+    annotations:
+  {%- for k,v in deploymentAnnotations.items() %}   
+      {{ k }}: {{v}}
+  {% endfor %}   
+  {% endif %}
+spec:
+  replicas: {{ instances|default('1') }}
+  selector:
+    matchLabels:
+      app: {{ appName|default('AppSimulatorApp') }}
+      service: {{ serviceName }}
+  template:
+    metadata:
+      labels:
+        app: {{ appName|default('AppSimulatorApp') }}
+        service: {{ serviceName }}
+    spec:
+      containers:
+      - name: loader-container
+{%- if type == 'curl' %}
+        image: {{ imageNamePref|default('ghcr.io/cisco-open/') }}app-simulator-loaders-{{ type }}:{{ imageVersion|default('latest') }}
+        env:
+          - name: URLS
+            value: {{ urls }}
+          - name: WAIT
+            value: "{{ wait }}"
+          - name: SLEEP
+            value: "{{ sleep }}"
+{%- endif %}
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "300m"
+          requests:
+            memory: "128Mi"
+            cpu: "150m"
+
