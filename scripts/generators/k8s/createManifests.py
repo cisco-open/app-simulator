@@ -39,6 +39,14 @@ def renderDeployment(templ, service_name, service_type, service_port):
         rendered_yaml = yaml.safe_load(template.render(context))
         return rendered_yaml 
 
+def renderDeployment2(templ_type, config, serviceName):
+    with open(f"./templates/{templ_type}/deployment.yaml.j2", 'r') as file:
+        config.update(serviceName=serviceName)
+        print(json.dumps(config, indent=2))
+        template = Template(file.read())
+        rendered_yaml = yaml.safe_load(template.render(config))
+        return rendered_yaml 
+
 def merge_dicts(dict1, dict2):
     """
     Recursively merge two dictionaries.
@@ -78,75 +86,81 @@ def write_yaml(file_path, data):
         print(f"An error occurred while writing to the file: {e}")
 
 # Example usage
+def main():
+    parser = argparse.ArgumentParser(description='Process some configuration file.')
+    parser.add_argument(
+        '--config', 
+        type=str, 
+        default='config.yaml',  # Set your default config file here
+        help='Path to the configuration file (default: default_config.yaml)'
+        )
+    args = parser.parse_args()
+    config_file = args.config
+    print(f'Using configuration file: {config_file}')
 
-parser = argparse.ArgumentParser(description='Process some configuration file.')
-parser.add_argument(
-    '--config', 
-    type=str, 
-    default='config.yaml',  # Set your default config file here
-    help='Path to the configuration file (default: default_config.yaml)'
-    )
-args = parser.parse_args()
-config_file = args.config
-print(f'Using configuration file: {config_file}')
+    #file_path = 'config.yaml'  # Replace with your YAML file path
+    yaml_data = read_yaml(config_file)
+    application_services = {'java', 'dotnet', 'nodejs'} # adding php, pyhton
+    db_services = {'mysql'}  # adding mongo
+    loader_services = {'curl'}
 
-#file_path = 'config.yaml'  # Replace with your YAML file path
-yaml_data = read_yaml(config_file)
-application_services = {'java', 'dotnet', 'nodejs'} # adding php, pyhton
-db_services = {'mysql'}  # adding mongo
-loader_services = {'curl'}
+    if isinstance(yaml_data, dict):
+        globalConfig = yaml_data.get("k8s", {})
+        print(f"Global Config:\n", json.dumps(globalConfig, indent=2))
+        for key, value in yaml_data.items():
+            if key == "services":
+                #print(f"Value: {value}")
+                for service, config in value.items():
+                    config['agent'] = False
+                    if config['type'] in application_services:
+                        print(f"create Appplication Service of type {config['type']} named {service}") 
+                        if config.get('port') != None:
+                            write_yaml(f"./deployments/{service}-service-ext.yaml", renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=8080,service_ext_port=config.get('port'),service_type="ext"))
+                        write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=8080,service_ext_port=8080,service_type="int"))
+                        write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
+                        #write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))  
+                        write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment2(key,config,service))
 
-if isinstance(yaml_data, dict):
-    for key, value in yaml_data.items():
-        if key== "k8s":
-            print("Reading properties for k8s")
-            print(f"Value: {value}")
-        elif key == "services":
-            #print(f"Value: {value}")
-            for service, config in value.items():
-                config['agent'] = False
-                if config['type'] in application_services:
-                    print(f"create Appplication Service of type {config['type']} named {service}") 
-                    if config.get('port') != None:
-                        write_yaml(f"./deployments/{service}-service-ext.yaml", renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=8080,service_ext_port=config.get('port'),service_type="ext"))
-                    write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=8080,service_ext_port=8080,service_type="int"))
-                    write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
-                    write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))
-                elif config['type'] in db_services:
-                    print(f"create DB Service of type {config['type']} named {service}")
-                    write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/db-service.yaml.tmpl",service_name=service,service_port=0,service_ext_port=0,service_type=config['type']))
-                    write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
-                    write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/db-deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))
-                else:
-                    print(f"Unsupported service type detected {config['type']} named {service}")
-        elif key == "loaders":
-            for loader, config in value.items():
-                if config['type'] in loader_services:
-                    print (f"create loader service of type {config['type']} named {loader}")
-                    with open('./templates/curl-deployment.yaml.tmpl', 'r') as file:
-                        template = Template(file.read())
-                        context = {
-                            'service_name': loader, 
-                            'service_type': config['type'],
-                            'urls': " ".join(config['urls']),
-                            'wait': config.get('wait',15),
-                            'sleep': config.get('sleep',0.1)
-                            }
-                        rendered_yaml = yaml.safe_load(template.render(context))
-                        write_yaml(f"./deployments/{loader}-deployment.yaml", rendered_yaml)
-                else:
-                    print(f"Unsupported loader type detected {config['type']} named {loader}")
-        elif key == "databases":
-            for service, config in value.items():
-                config['agent'] = False
-                if config['type'] in db_services:
-                    print(f"create DB Service of type {config['type']} named {service}")
-                    write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=0,service_ext_port=0,service_type=config['type']))
-                    write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
-                    write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))
-                else:
-                    print(f"Unsupported service type detected {config['type']} named {service}")
-        else:
-            print(f"found unsupported key {key} in config - ignoring")
-else:
-    print("The top-level structure is not a dictionary.")
+                    elif config['type'] in db_services:
+                        print(f"create DB Service of type {config['type']} named {service}")
+                        write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/db-service.yaml.tmpl",service_name=service,service_port=0,service_ext_port=0,service_type=config['type']))
+                        write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
+                        write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/db-deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))
+                    else:
+                        print(f"Unsupported service type detected {config['type']} named {service}")
+            elif key == "loaders":
+                for loader, config in value.items():
+                    if config['type'] in loader_services:
+                        print (f"create loader service of type {config['type']} named {loader}")
+                        with open('./templates/curl-deployment.yaml.tmpl', 'r') as file:
+                            template = Template(file.read())
+                            context = {
+                                'service_name': loader, 
+                                'service_type': config['type'],
+                                'urls': " ".join(config['urls']),
+                                'wait': config.get('wait',15),
+                                'sleep': config.get('sleep',0.1)
+                                }
+                            rendered_yaml = yaml.safe_load(template.render(context))
+                            write_yaml(f"./deployments/{loader}-deployment.yaml", rendered_yaml)
+                    else:
+                        print(f"Unsupported loader type detected {config['type']} named {loader}")
+            elif key == "databases":
+                for service, config in value.items():
+                    config['agent'] = False
+                    if config['type'] in db_services:
+                        print(f"create DB Service of type {config['type']} named {service}")
+                        write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=0,service_ext_port=0,service_type=config['type']))
+                        write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
+                        write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))
+                    else:
+                        print(f"Unsupported service type detected {config['type']} named {service}")
+            elif key == "k8s":
+                None
+            else:
+                print(f"found unsupported key {key} in config - ignoring")
+    else:
+        print("The top-level structure is not a dictionary.")
+
+if __name__ == '__main__':
+    main()
