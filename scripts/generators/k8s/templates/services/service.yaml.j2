@@ -1,4 +1,4 @@
-{%- if port %}
+{%- if exposedPort %}
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,8 +9,8 @@ spec:
     service: {{ serviceName }}
   ports:
     - protocol: TCP
-      targetPort: {{ service_port|default('8080') }}
-      port: {{ port }}
+      targetPort: {{ servicePort|default('8080') }}
+      port: {{ exposedPort }}
   type: LoadBalancer
 {% else %}
 apiVersion: v1
@@ -23,7 +23,7 @@ spec:
     service: {{ serviceName }}
   ports:
     - protocol: TCP
-      targetPort: {{ service_port|default('8080') }}
+      targetPort: {{ servicePort|default('8080') }}
       port: 80
   type: ClusterIP
 {% endif %}

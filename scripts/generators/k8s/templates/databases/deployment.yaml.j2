@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ serviceName }}
+  labels:
+    app: {{ appName|default('AppSimulatorApp') }}
+    service: {{ serviceName }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ appName|default('AppSimulatorApp') }}
+      service: {{ serviceName }}
+  template:
+    metadata:
+      labels:
+        app: {{ appName|default('AppSimulatorApp') }}
+        service: {{ serviceName }}
+    spec:
+      containers:
+      - name: db-container
+        image: {{ imageNamePref|default('ghcr.io/cisco-open/') }}app-simulator-databases-{{ type }}:{{ imageVersion|default('latest') }}
+        imagePullPolicy: Always
+        ports:
+{%- if type == 'mysql' %}
+        - containerPort: {{ servicePort|default('3306') }}
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: root
+{%- elif type == 'mongo' %}
+        - containerPort: {{ servicePort|default('27017') }}
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+          value: root
+          - name: MONGO_INITDB_ROOT_PASSWORD
+          value: root
+{%- endif %}
+        resources: {}
+        volumeMounts: 
+          - name: config-json
+            mountPath: /config.json
+            subPath: config.json
+      volumes:
+        - name: config-json
+          configMap:
+            name: {{ serviceName }}-json

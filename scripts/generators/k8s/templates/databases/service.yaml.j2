@@ -1,0 +1,39 @@
+{%- if exposedPort %}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ serviceName }}-ext
+spec:
+  selector:
+    app: {{ appName|default('AppSimulatorApp') }}
+    service: {{ serviceName }}
+  ports:
+    - protocol: TCP
+{%- if type == 'mysql' %}
+      targetPort: {{ servicePort|default('3306') }}
+      port: {{ exposedPort|default('3306') }}
+{%- elif type == 'mongo' %}   
+      targetPort: {{ servicePort|default('27017') }}
+      port: {{ exposedPort|default('27017') }}
+{% endif %}
+  type: LoadBalancer
+{% else %}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ serviceName }}
+spec:
+  selector:
+    app: {{ appName|default('AppSimulatorApp') }}
+    service: {{ serviceName }}
+  ports:
+    - protocol: TCP
+{%- if type == 'mysql' %}
+      targetPort: {{ servicePort|default('3306') }}
+      port: {{ exposedPort|default('3306') }}
+{%- elif type == 'mongo' %}   
+      targetPort: {{ servicePort|default('27017') }}
+      port: {{ exposedPort|default('27017') }}
+{% endif %}
+  type: ClusterIP
+{% endif %}

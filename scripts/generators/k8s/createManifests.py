@@ -130,7 +130,18 @@ def main():
     loader_services = {'curl'}
 
     if isinstance(yaml_data, dict):
-        globalConfig = yaml_data.get("k8s", {})
+# merge the global and k8s configs from simpler access
+# some ugly code hacked togeter, so that it works for MVP
+# TODO: clean up code
+        globalConfig = yaml_data.get("global", {})
+        keys_to_keep = {  "appName","imageNamePrefix","k8s"} 
+        gconfig = {key: globalConfig[key] for key in keys_to_keep if key in globalConfig}
+        globalConfigK8s = gconfig.get("k8s", {})
+        gconfig.pop("k8s", None)
+        globalConfig = merge_dicts(gconfig, globalConfigK8s)
+#
+#
+        yaml_data.pop("global", None)
         print(f"Global Config:\n", json.dumps(globalConfig, indent=2))
         for key, value in yaml_data.items():
             if key == "services":
@@ -139,26 +150,17 @@ def main():
                     config['agent'] = False
                     if config['type'] in application_services:
                         print(f"create Appplication Service of type {config['type']} named {service}") 
-#                        if config.get('port') != None:
-#                            write_yaml(f"./deployments/{service}-service-ext.yaml", renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=8080,service_ext_port=config.get('port'),service_type="ext"))
-#                        write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=8080,service_ext_port=8080,service_type="int"))
-                        #write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
-                        #write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))  
                         write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap2(key, config, service))
-                        write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment2(key,config,service))
-                        if config.get('port') != None:
-                            write_yaml(f"./deployments/{service}-service-ext.yaml",renderService2(key,config,service))
+                        write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment2(key,config, service))
+                        if config.get('exposedPort', None) != None:
+                            print(f"ExposedPort: {config.get('exposedPort')}")
+                            write_yaml(f"./deployments/{service}-service-ext.yaml",renderService2(key, config, service))
                             config2 = config
-                            config2.pop('port')
+                            config2.pop('exposedPort', None)
                             # if port is set, we do need two service, one of type cluserIP and one of type Loadbalancer. As I'm unable to render a yaml template with 2 documents I need to workaround
-                            write_yaml(f"./deployments/{service}-service.yaml",renderService2(key,config,service))
+                            write_yaml(f"./deployments/{service}-service.yaml",renderService2(key, config, service))
                         else:
-                            write_yaml(f"./deployments/{service}-service.yaml",renderService2(key,config,service))
-#                    elif config['type'] in db_services:
-#                        print(f"create DB Service of type {config['type']} named {service}")
-#                        write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/db-service.yaml.tmpl",service_name=service,service_port=0,service_ext_port=0,service_type=config['type']))
-#                        write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
-#                        write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/db-deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))
+                            write_yaml(f"./deployments/{service}-service.yaml",renderService2(key, config, service))
                     else:
                         print(f"Unsupported service type detected {config['type']} named {service}")
             elif key == "loaders":
@@ -183,15 +185,29 @@ def main():
                     config['agent'] = False
                     if config['type'] in db_services:
                         print(f"create DB Service of type {config['type']} named {service}")
-                        write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=0,service_ext_port=0,service_type=config['type']))
-                        write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
-                        write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))
+                        write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap2(key, config, service))
+                        write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment2(key,config, service))
+                        if config.get('exposedPort', None) != None:
+                            write_yaml(f"./deployments/{service}-service-ext.yaml",renderService2(key, config, service))
+                            config2 = config
+                            config2.pop('exposedPort', None)
+                            write_yaml(f"./deployments/{service}-service.yaml",renderService2(key, config, service))
+                        else:
+                            write_yaml(f"./deployments/{service}-service.yaml",renderService2(key, config, service))
+                        #write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=0,service_ext_port=0,service_type=config['type']))
+                        #write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
+                        #write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))
                     else:
                         print(f"Unsupported service type detected {config['type']} named {service}")
-            elif key == "k8s":
-                None
             else:
-                print(f"found unsupported key {key} in config - ignoring")
+                print(f"found unsupported key {key} in config - try rendering deployment, service and configmap")
+                try :
+                    for service, config in value.items():
+                        write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap2(key, config, service))
+                        write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment2(key,config, service))
+                        write_yaml(f"./deployments/{service}-service-ext.yaml",renderService2(key, config, service))
+                except Exception as e:
+                    print(f"An error occured, skipping: {e}")
     else:
         print("The top-level structure is not a dictionary.")
 
