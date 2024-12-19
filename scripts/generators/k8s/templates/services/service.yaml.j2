@@ -1,22 +1,29 @@
+{%- if port %}
 apiVersion: v1
 kind: Service
 metadata:
-{%- if service_type == 'ext' %}
-  name: {{ service_name }}-service-ext
-{%- else %}
-  name: {{ service_name }}
-{%- endif %}
+  name: {{ serviceName }}-ext
 spec:
   selector:
     app: {{ appName|default('AppSimulatorApp') }}
-    service: {{ service_name }}
+    service: {{ serviceName }}
   ports:
     - protocol: TCP
-      targetPort: {{ service_port }}
-{%- if service_type == 'ext' %}
-      port: {{ service_ext_port }}
+      targetPort: {{ service_port|default('8080') }}
+      port: {{ port }}
   type: LoadBalancer
-{%- else %}
+{% else %}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ serviceName }}
+spec:
+  selector:
+    app: {{ appName|default('AppSimulatorApp') }}
+    service: {{ serviceName }}
+  ports:
+    - protocol: TCP
+      targetPort: {{ service_port|default('8080') }}
       port: 80
   type: ClusterIP
-{%- endif %}
+{% endif %}

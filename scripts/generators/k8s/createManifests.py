@@ -42,10 +42,35 @@ def renderDeployment(templ, service_name, service_type, service_port):
 def renderDeployment2(templ_type, config, serviceName):
     with open(f"./templates/{templ_type}/deployment.yaml.j2", 'r') as file:
         config.update(serviceName=serviceName)
+        print(f"Rendering Deployment {serviceName}")
         print(json.dumps(config, indent=2))
         template = Template(file.read())
         rendered_yaml = yaml.safe_load(template.render(config))
         return rendered_yaml 
+
+def renderService2(templ_type, config, serviceName):
+    with open(f"./templates/{templ_type}/service.yaml.j2", 'r') as file:
+        config.update(serviceName=serviceName)
+        print(f"Rendering Service {serviceName}")
+        print(json.dumps(config, indent=2))
+        template = Template(file.read())
+        rendered_yaml = yaml.safe_load(template.render(config))
+        print(f"Rendered Template:\n{yaml.dump(rendered_yaml)}")
+        return rendered_yaml     
+
+def renderConfigMap2(templ_type, config, serviceName):
+    with open(f"./templates/{templ_type}/configmap.yaml.j2", 'r') as file:
+        config.update(serviceName=serviceName)
+        print(f"Rendering ConfigMap {serviceName}")
+        print(json.dumps(config, indent=2))
+        context = {
+            'serviceName': serviceName, 
+            'serviceConfig': json.dumps(config), 
+        }
+        template = Template(file.read())
+        rendered_yaml = yaml.safe_load(template.render(context))
+        print(f"Rendered Template:\n{yaml.dump(rendered_yaml)}")
+        return rendered_yaml   
 
 def merge_dicts(dict1, dict2):
     """
@@ -114,13 +139,21 @@ def main():
                     config['agent'] = False
                     if config['type'] in application_services:
                         print(f"create Appplication Service of type {config['type']} named {service}") 
-                        if config.get('port') != None:
-                            write_yaml(f"./deployments/{service}-service-ext.yaml", renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=8080,service_ext_port=config.get('port'),service_type="ext"))
-                        write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=8080,service_ext_port=8080,service_type="int"))
-                        write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
+#                        if config.get('port') != None:
+#                            write_yaml(f"./deployments/{service}-service-ext.yaml", renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=8080,service_ext_port=config.get('port'),service_type="ext"))
+#                        write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=8080,service_ext_port=8080,service_type="int"))
+                        #write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
                         #write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))  
+                        write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap2(key, config, service))
                         write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment2(key,config,service))
-
+                        if config.get('port') != None:
+                            write_yaml(f"./deployments/{service}-service-ext.yaml",renderService2(key,config,service))
+                            config2 = config
+                            config2.pop('port')
+                            # if port is set, we do need two service, one of type cluserIP and one of type Loadbalancer. As I'm unable to render a yaml template with 2 documents I need to workaround
+                            write_yaml(f"./deployments/{service}-service.yaml",renderService2(key,config,service))
+                        else:
+                            write_yaml(f"./deployments/{service}-service.yaml",renderService2(key,config,service))
                     elif config['type'] in db_services:
                         print(f"create DB Service of type {config['type']} named {service}")
                         write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/db-service.yaml.tmpl",service_name=service,service_port=0,service_ext_port=0,service_type=config['type']))
