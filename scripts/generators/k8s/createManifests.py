@@ -6,41 +6,6 @@ import os
 
 debug_mode = False
 
-def renderService(templ,service_name, service_port, service_ext_port, service_type=""):
-    with open(templ, 'r') as file:
-        template = Template(file.read())
-        context = {
-            'service_name': service_name, 
-            'service_port': service_port, 
-            'service_ext_port': service_ext_port, 
-            'service_type': service_type 
-            }
-        rendered_yaml = yaml.safe_load(template.render(context))
-        return rendered_yaml
-
-def renderConfigMap(templ, service_name, service_config):
-    with open(templ, 'r') as file:
-        template = Template(file.read())
-        myconfig = service_config
-        myconfig['name']=service_name
-        context = {
-            'service_name': service_name, 
-            'service_config': json.dumps(myconfig), 
-            }
-        rendered_yaml = yaml.safe_load(template.render(context))
-        return rendered_yaml 
-
-def renderDeployment(templ, service_name, service_type, service_port):
-    with open(templ, 'r') as file:
-        template = Template(file.read())
-        context = {
-            'service_name': service_name, 
-            'service_type': service_type,
-            'service_port': service_port, 
-            }
-        rendered_yaml = yaml.safe_load(template.render(context))
-        return rendered_yaml 
-
 def renderDeployment2(templ_type, config, serviceName):
     with open(f"./templates/{templ_type}/deployment.yaml.j2", 'r') as file:
         config.update(serviceName=serviceName)
@@ -156,6 +121,7 @@ def main():
         globalConfig = merge_dicts(gconfig, globalConfigK8s)
         yaml_data.pop("global", None)
         debug_print(f"Global Config:\n", json.dumps(globalConfig, indent=2))
+# Ok, lets start to parse through the services and render the k8s deployments
         for key, value in yaml_data.items():
             if key == "services":
                 #debug_print(f"Value: {value}")
@@ -209,9 +175,6 @@ def main():
                             write_yaml(f"./deployments/{service}-service.yaml",renderService2(key, config, service))
                         else:
                             write_yaml(f"./deployments/{service}-service.yaml",renderService2(key, config, service))
-                        #write_yaml(f"./deployments/{service}-service.yaml",renderService(templ=f"./templates/{key}/service.yaml.tmpl",service_name=service,service_port=0,service_ext_port=0,service_type=config['type']))
-                        #write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap(templ=f"./templates/{key}/config-map.yaml.tmpl",service_name=service, service_config=config))
-                        #write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment(templ=f"./templates/{key}/deployment.yaml.tmpl", service_name=service,service_type=config.get('type'),service_port=8080))
                     else:
                         print(f"Unsupported service type detected {config['type']} named {service}")
             else:
