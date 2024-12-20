@@ -4,13 +4,6 @@
 #Performance Issue 2 - Bad SQL Call & Slow execution on /processpolicy and /history BTs on 13% of calls
 #Performance Issue 3 - Slow web service call for selectquote on 37% of calls
 #TIP - You can run two versions of the script, upping the load and issues for one
-apm:
-  applicationName: AD-Insurance
-  controller: 
-  accountName: 
-  accountAccessKey: 
-  eventsService: 
-  globalAccountName: 
 
 services:
   web-frontend:
