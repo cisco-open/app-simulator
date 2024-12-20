@@ -1,13 +1,15 @@
-k8s:
+global:
   appName: "DemoApp"
+  # may contain as well the registry information  
+  imageNamePrefix: app-simulator/
+  k8s:
   serviceAnnotations:
     a: serviceValueGlobalA
     b: serviceValueGlobalB
   deploymentAnnotations:
     a: deploymentValueGlobalA
     b: deploymentValueGlobalB
-  # may contain as well the registry information  
-  imageNamePrefix: astoklas177/
+
 services:
   web-frontend-java:
     type: java
