@@ -2,7 +2,8 @@
 
 This project is intended to replace the run.sh and build.sh orginally included in APM game. It creates deployment files to let APM games run on kubernetes. It creates the required deployment, service and a config-map which holds the configuration for every service defined.
 
-It also handles the deployment of databases and loaders. The AppDynamics specific part has been removed from the images and the build process.
+It handles the deployment of databases and loaders as well as custom serices. The AppDynamics specific part has been removed from the images and the build process.
+As there is no content or syntax check, you need to make sure that the templates render propery and are valid for k8s. The generated yamls should be comlpliant according to yaml specs, but there is no check for validity againt k8s. 
 
 ## Usage
 to run the generator, you'll need to have a working python environment with the depencies outlined in 'requirements.txt' installed. This can be your global environment or a venv. For more information how to create a venv (highly recommended) please see the [official pyhton docs](https://docs.python.org/3/library/venv.html)
