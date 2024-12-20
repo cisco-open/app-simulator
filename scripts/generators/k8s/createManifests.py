@@ -89,7 +89,7 @@ def main():
         '--config', 
         type=str, 
         default='config.yaml',  # Set your default config file here
-        help='Path to the configuration file (default: default_config.yaml)'
+        help='Path to the configuration file (default: config.yaml)'
         )
     parser.add_argument(
         '--debug',
@@ -179,7 +179,7 @@ def main():
                         print(f"Unsupported service type detected {config['type']} named {service}")
             else:
 #                
-#TODO: this code needs to be tested
+#TODO: works but is totally unsupported
 #
                 print(f"found unsupported key {key} in config - try rendering deployment, service and configmap")
                 try :
