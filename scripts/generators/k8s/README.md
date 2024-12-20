@@ -39,3 +39,6 @@ custom1:
 ```
 
 this will look for 3 template files in `./templates/custom1' named 'configmap.yaml.j2', 'deployment.yaml.j2', 'service.yaml.j2'. The generator will attempt to render all 3 of them, regardless if they are required or not. Worst case, create an empty valid configuration template.
+
+## Status
+draft documentation
