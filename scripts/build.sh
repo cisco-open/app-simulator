@@ -73,4 +73,3 @@ for DIR in "${REPO_DIR}/src/loaders"/*; do
 		docker buildx build --platform "$PLATFORM" -t "$IMAGE_TAG" $PUSH "$DIR" $PUSH
 	fi
 done
-

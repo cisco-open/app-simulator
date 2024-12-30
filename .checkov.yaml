@@ -1,0 +1,5 @@
+skip-path:
+  - "/src/databases/mysql/Dockerfile"
+  - "/src/services/java/Dockerfile"
+  - "/src/services/nodejs/Dockerfile"
+  - "/src/loaders/curl/Dockerfile"

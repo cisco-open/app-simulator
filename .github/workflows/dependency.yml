@@ -3,7 +3,7 @@ name: dependency
 on:
   # Review dependencies on pull requests to the default branch
   pull_request:
-    branches: ['main']
+    branches: ["main"]
 # Declare default permissions as read-only
 permissions: read-all
 jobs:
@@ -21,7 +21,7 @@ jobs:
       - name: 🔂 dependency review
         uses: actions/dependency-review-action@3b139cfc5fae8b618d3eae3675e383bb1769c019 # v4.5.0
         with:
-          fail-on-severity: 'high'
-          deny-licenses: 'AGPL-1.0, AGPL-3.0'
+          fail-on-severity: "high"
+          deny-licenses: "AGPL-1.0, AGPL-3.0"
           comment-summary-in-pr: true
           warn-on-openssf-scorecard-level: 3

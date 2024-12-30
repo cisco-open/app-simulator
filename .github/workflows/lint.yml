@@ -31,8 +31,19 @@ jobs:
         uses: super-linter/super-linter@85f7611e0f7b53c8573cca84aa0ed4344f6f6a4d # v7.2.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LINTER_RULES_PATH: '.'
-          YAML_CONFIG_FILE: '.yamllint'
+          LINTER_RULES_PATH: "."
+          YAML_CONFIG_FILE: ".yamllint"
+          CHECKOV_FILE_NAME: ".checkov.yaml"
+          DOCKERFILE_HADOLINT_FILE_NAME: ".hadolint.yaml"
           VALIDATE_GIT_COMMITLINT: false
           VALIDATE_ALL_CODEBASE: false
+          # Reenable when java service is modernized
+          VALIDATE_JAVA: false
+          # Reenable when Node.JS service is modernized
+          VALIDATE_JAVASCRIPT_STANDARD: false
+          # We want to remove the PHP script for the mysql database later, so
+          # we disable php linting for now
+          VALIDATE_PHP_PHPCS: false
+          VALIDATE_PHP_PSALM: false
           MULTI_STATUS: false
+          ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true

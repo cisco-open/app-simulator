@@ -3,7 +3,11 @@ name: Build and publish release container images
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - "v*.*.*"
+
+# Declare default permissions as read-only
+permissions: read-all
+
 jobs:
   build:
     uses: ./.github/workflows/reusable-build-container-images.yml

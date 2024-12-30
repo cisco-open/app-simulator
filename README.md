@@ -15,17 +15,17 @@ of the different components that make up an application.
 
 This includes the following use cases:
 
-* Tailored demo environments for observability, e.g. instrumenting all services with OpenTelemetry and visualizing the
+- Tailored demo environments for observability, e.g. instrumenting all services with OpenTelemetry and visualizing the
   data in your preferred backend.
-* Complex simulated environments for in-cluster network experiments, e.g. testing out new features of cilium.
+- Complex simulated environments for in-cluster network experiments, e.g. testing out new features of cilium.
 
 ## Quick Start
 
 You can use application simulator with your preferred container orchestration, since all components are available as
 container images. We provide the best experience for docker compose and kubernetes. Pick one of them for a quick start!
 
-* [kubernetes quick start](./docs/quick-start/kubernetes.md)
-* [docker compose quick start](./docs/quick-start/docker-compose.md)
+- [kubernetes quick start](./docs/quick-start/kubernetes.md)
+- [docker compose quick start](./docs/quick-start/docker-compose.md)
 
 ## Tutorial
 
@@ -38,7 +38,7 @@ After you have tried out application simulator with the quick start, you can lea
 
 ## Configuration specification
 
-Application simulator is driven by configuration files that allow you to easily describe a micro service architecture and
+Application simulator is driven by configuration files that allow you to describe a microservice architecture and
 then run it with your preferred container orchestration. The configuration file follows a [specification](./docs/specification.md)
 
 ## Contribute

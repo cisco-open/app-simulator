@@ -1,8 +1,8 @@
 ---
 name: Feature Request
 description: Suggest a feature for this project.
-title: '[Feature]: '
-labels: ['enhancement', 'triage']
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
 body:
   - type: markdown
     attributes:
@@ -48,8 +48,7 @@ body:
       label: Checklist
       description: By submitting this request, you agree to the following
       options:
-        - label:
-            I have read the [contributing
+        - label: I have read the [contributing
             guidelines](/cisco-open/app-simulator/blob/main/CONTRIBUTING.md)
           required: true
         - label: |
