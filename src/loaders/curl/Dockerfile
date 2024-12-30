@@ -7,7 +7,7 @@ LABEL org.opencontainers.image.licenses=BSD-3-Clause
 # Pining versions with alpine regularly breaks, disable linting for this line
 # until a better solution is found.
 # hadolint ignore=DL3018
-RUN apk add --no-cache curl util-linux jq
+RUN apk add --no-cache bash curl util-linux jq
 
 WORKDIR /usr/bin/
 COPY entrypoint.sh /usr/bin
