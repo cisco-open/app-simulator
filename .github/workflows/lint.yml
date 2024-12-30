@@ -36,3 +36,4 @@ jobs:
           VALIDATE_GIT_COMMITLINT: false
           VALIDATE_ALL_CODEBASE: false
           MULTI_STATUS: false
+          ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
