@@ -37,17 +37,16 @@ services:
     build:
       context: ../src/loaders/curl
       dockerfile: Dockerfile
+  backend-db:
+    image: ghcr.io/cisco-open/app-simulator-databases-mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    build:
+      context: ../src/databases/mysql
+      dockerfile: Dockerfile
+    ports:
+      - "3306:3306"
     volumes:
-      - ./loader.json:/config.json
-    
-#  backend-db:
-#    image: ghcr.io/cisco-open/app-simulator-databases-mysql:latest
-#    build:
-#      context: ../src/databases/mysql
-#      dockerfile: Dockerfile
-#    ports:
-#      - "3306:3306"
-#    volumes:
-#     - ./backend-db.json:/config.json
+     - ./database.json:/config.json
 networks:
   default:
