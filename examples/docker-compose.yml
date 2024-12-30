@@ -1,3 +1,4 @@
+---
 services:
   frontend:
     image: ghcr.io/cisco-open/app-simulator-services-java:latest
@@ -47,6 +48,6 @@ services:
     ports:
       - "3306:3306"
     volumes:
-     - ./database.json:/config.json
+      - ./database.json:/config.json
 networks:
   default:

@@ -12,6 +12,10 @@ on:
         default: "ghcr.io/cisco-open/app-simulator"
         required: false
         type: string
+
+# Declare default permissions as read-only
+permissions: read-all
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -39,7 +43,7 @@ jobs:
           # build semver releases on tag
           # build edge releases on main branch
           tags: |
-            type=schedule,pattern={{date 'YYYYMMDD'}} 
+            type=schedule,pattern={{date 'YYYYMMDD'}}
             type=semver,pattern={{ version }}
             type=edge,branch=main
           labels: |

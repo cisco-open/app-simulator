@@ -10,6 +10,10 @@ on:
       - ".github/workflows/reusable-build-container-images.yml"
       - ".github/workflows/build-images-on-commit.yml"
   workflow_dispatch:
+
+# Declare default permissions as read-only
+permissions: read-all
+
 jobs:
   build:
     uses: ./.github/workflows/reusable-build-container-images.yml
