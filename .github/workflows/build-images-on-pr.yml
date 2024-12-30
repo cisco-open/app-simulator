@@ -2,7 +2,6 @@
 name: Check container builds
 on:
   pull_request_target:
-    branches: [main]
     paths:
       - "src/loaders/**"
       - "src/services/**"
