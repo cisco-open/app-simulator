@@ -1,7 +1,9 @@
 # Application Simulator
 
 [![Contributor-Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-fbab2c.svg)](CODE_OF_CONDUCT.md)
+[![License](https://img.shields.io/github/license/cisco-open/app-simulator?label=License)](LICENSE)
 [![Maintainer](https://img.shields.io/badge/Maintainer-Cisco-00bceb.svg)](https://opensource.cisco.com)
+[![Release](https://img.shields.io/github/v/release/cisco-open/app-simulator?label=Release)](https://github.com/cisco-open/app-simulator/releases)
 
 Application Simulator allows you to rapidly create a set of interacting
 services, databases and load generators to simulate application deployments of
