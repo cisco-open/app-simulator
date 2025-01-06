@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: app-container      
-        image: {{ imageNamePref|default('ghcr.io/cisco-open/') }}app-simulator-services-{{ type|default('java') }}:{{ imageVersion|default('latest') }}
+        image: {{ imageNamePrefix|default('ghcr.io/cisco-open/') }}app-simulator-services-{{ type|default('java') }}:{{ imageVersion|default('latest') }}
         imagePullPolicy: Always
         env:
         - name: NODE_IP

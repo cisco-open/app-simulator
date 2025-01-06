@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: db-container
-        image: {{ imageNamePref|default('ghcr.io/cisco-open/') }}app-simulator-databases-{{ type }}:{{ imageVersion|default('latest') }}
+        image: {{ imageNamePrefix|default('ghcr.io/cisco-open/') }}app-simulator-databases-{{ type }}:{{ imageVersion|default('latest') }}
         imagePullPolicy: Always
         ports:
 {%- if type == 'mysql' %}

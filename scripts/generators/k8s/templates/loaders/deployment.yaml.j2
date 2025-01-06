@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ serviceName }}-loader
+  name: {{ serviceName }}
   labels:
     app: {{ appName|default('AppSimulatorApp') }}
     service: {{ serviceName }}
   {%- if deploymentAnnotations %}
-    annotations:
+  annotations:
   {%- for k,v in deploymentAnnotations.items() %}   
       {{ k }}: {{v}}
   {% endfor %}   
@@ -26,7 +26,7 @@ spec:
       containers:
       - name: loader-container
 {%- if type == 'curl' %}
-        image: {{ imageNamePref|default('ghcr.io/cisco-open/') }}app-simulator-loaders-{{ type }}:{{ imageVersion|default('latest') }}
+        image: {{ imageNamePrefix|default('ghcr.io/cisco-open/') }}app-simulator-loaders-{{ type }}:{{ imageVersion|default('latest') }}
         env:
           - name: URLS
             value: {{ urls }}

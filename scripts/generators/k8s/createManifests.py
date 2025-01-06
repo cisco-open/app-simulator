@@ -103,7 +103,7 @@ def main():
 
     #file_path = 'config.yaml'  # Replace with your YAML file path
     yaml_data = read_yaml(config_file)
-    application_services = {'java', 'dotnet', 'nodejs'} # adding php, pyhton
+    application_services = {'java', 'dotnetcore', 'nodejs'} # adding php, pyhton
     db_services = {'mysql'}  # adding mongo
     loader_services = {'curl'}
 
@@ -112,7 +112,7 @@ def main():
 # some ugly code hacked togeter, so that it works for MVP
 # TODO: clean up code
         globalConfig = yaml_data.get("global", {})
-        keys_to_keep = {  "appName","imageNamePrefix","k8s"} 
+        keys_to_keep = {  "appName","imageNamePrefix","imageVersion","k8s"} 
         gconfig = {key: globalConfig[key] for key in keys_to_keep if key in globalConfig}
         debug_print(f"gconfig: gconfig")
         globalConfigK8s = gconfig.get("k8s", {})
@@ -147,16 +147,13 @@ def main():
                 for loader, config in value.items():
                     if config['type'] in loader_services:
                         print (f"create loader service of type {config['type']} named {loader}")
-                        config=merge_dicts(globalConfig, config)
-                        context = {
-                            'serviceName': loader, 
-                            'type': config['type'],
-                            'urls': " ".join(config['urls']),
-                            'wait': config.get('wait',15),
-                            'sleep': config.get('sleep',0.1)
-                            }
-                        write_yaml(f"./deployments/{service}-configmap.yaml",renderConfigMap2(key, config, service))
-                        write_yaml(f"./deployments/{service}-deployment.yaml",renderDeployment2(key, context, service))
+                        context=merge_dicts(globalConfig, config)
+                        context['serviceName'] = loader 
+                        context['type'] = config['type']
+                        context['urls'] = " ".join(config['urls'])
+                        print(f"Context to be passed: {context}")
+                        write_yaml(f"./deployments/{loader}-configmap.yaml",renderConfigMap2(key, config, loader))
+                        write_yaml(f"./deployments/{loader}-deployment.yaml",renderDeployment2(key, context, loader))
                         # There is no need to create a service for a loadgenerator at this point in time
                     else:
                         print(f"Unsupported loader type detected {config['type']} named {loader}")
