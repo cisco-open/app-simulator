@@ -1,8 +1,7 @@
 {
-    "type": "mysql",
-    "name": "backend-db",
-    "databases": {
-        "carts": ["id", "name", "total"]
-    }
+  "type": "mysql",
+  "name": "backend-db",
+  "databases": {
+    "carts": ["id", "name", "total"]
   }
-  
+}

@@ -2,7 +2,11 @@
 name: Build and publish nightly container images
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
+
+# Declare default permissions as read-only
+permissions: read-all
+
 jobs:
   build:
     uses: ./.github/workflows/reusable-build-container-images.yml

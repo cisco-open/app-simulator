@@ -1,3 +1,5 @@
+# There is no arm64 version of mysql:5.7, so we use the amd64 version, until we migrate to mariadb.
+# hadolint ignore=DL3029
 FROM --platform=linux/amd64 mysql:5.7
 
 LABEL org.opencontainers.image.source=https://github.com/cisco-open/app-simulator

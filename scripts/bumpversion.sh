@@ -37,7 +37,7 @@ operation=""
 
 for arg in "$@"; do
 	case "$arg" in
-	--patch|--minor|--major)
+	--patch | --minor | --major)
 		operation="$arg"
 		;;
 	--push)
