@@ -6,7 +6,7 @@ file using the [docker compose generator](../../scripts/generators/docker-compos
 The generator is available as docker image and you can retrieve it by running
 
 ```shell
-docker pull cisco-open/app-simulator-generators-docker-compose:latest
+docker pull ghcr.io/cisco-open/app-simulator-generators-docker-compose:latest
 ```
 
 To try it out, create the a file called `config.yaml` with the following content
@@ -53,7 +53,7 @@ loaders:
 To generate a `docker-compose.yaml` from this file run
 
 ```shell
-docker run --rm -t -i --v ${PWD}:/mnt cisco-open/app-simulator-generators-docker-compose --config /mnt/config.yaml --output /mnt/docker-compose.yaml
+docker run --rm -t -i -v ${PWD}:/mnt cisco-open/app-simulator-generators-docker-compose --config /mnt/config.yaml --output /mnt/docker-compose.yaml
 ```
 
 Review the `docker-compose.yaml` generated and then run the simulation via:
