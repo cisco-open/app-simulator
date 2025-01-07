@@ -92,7 +92,7 @@ def main():
 
         template = env.get_template(template_path)
 
-        rendered_content = render_compose_file(template, data, defaultValues)
+        rendered_content = render_compose_file(template, yaml_data, defaultValues)
         
         with open(output_path, 'w') as output_file:
             output_file.write(rendered_content)
