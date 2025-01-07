@@ -7,8 +7,8 @@ on:
       - "src/loaders/**"
       - "src/services/**"
       - "src/databases/**"
-      - "scripts/docker-compose/**"
-      - "scripts/k8s/**"
+      - "scripts/generators/docker-compose/**"
+      - "scripts/generators/k8s/**"
       - ".github/workflows/reusable-build-container-images.yml"
       - ".github/workflows/build-images-on-commit.yml"
   workflow_dispatch:
