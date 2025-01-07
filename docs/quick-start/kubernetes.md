@@ -1,7 +1,7 @@
 # kubernetes quick start
 
-You can turn an [app sim config](../specification/README.md) into kubernetes manifest
-files using the [k8s generator](../../scripts/generators/k8s/).
+You can turn an [app sim config](../specification/README.md) into kubernetes
+manifest files using the [k8s generator](../../scripts/generators/k8s/).
 
 The generator is available as docker image and you can retrieve it by running
 
@@ -56,7 +56,8 @@ To generate manifest files for kubernetes from this file run
 docker run --rm -t -i -v ${PWD}/deployments:/app/deployments -v ${PWD}:/mnt ghcr.io/cisco-open/app-simulator-generators-k8s:latest --config /mnt/config.yaml
 ```
 
-This will create a set of YAML files in the `deployments` folder of your current working directory.
+This will create a set of YAML files in the `deployments` folder of your current
+working directory.
 
 To deploy the simulation into your cluster run
 
@@ -64,4 +65,5 @@ To deploy the simulation into your cluster run
 kubectl apply -f deployments/
 ```
 
-This will bring up the three services (`frontend`, `processing` and `virus-scanner`) and a loader (`user-1`). 
+This will bring up the three services (`frontend`, `processing` and
+`virus-scanner`) and a loader (`user-1`).

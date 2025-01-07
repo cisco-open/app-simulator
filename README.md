@@ -33,7 +33,7 @@ experience for docker compose and kubernetes. Pick one of them for a quick
 start!
 
 - [kubernetes quick start](./docs/quick-start/kubernetes.md)
-- [docker compose quick start](./docs/quick-start/docker-compose.md)
+- [docker compose quick start](./docs/quick-start/docker-compose/README.md)
 
 > [!NOTE]
 >
@@ -58,8 +58,10 @@ learn using it with the step by step tutorial:
 
 ## Configuration specification
 
-Application simulator is driven by configuration files that allow you to describe a microservice architecture and
-then run it with your preferred container orchestration. The configuration file follows a [specification](./docs/specification/README.md).
+Application simulator is driven by configuration files that allow you to
+describe a microservice architecture and then run it with your preferred
+container orchestration. The configuration file follows a
+[specification](./docs/specification/README.md).
 
 ## Contribute
 
