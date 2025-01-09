@@ -3,6 +3,8 @@
 You can turn an [app sim config](../specification/README.md) into kubernetes
 manifest files using the [k8s generator](../../scripts/generators/k8s/).
 
+## Generate k8s manifest files
+
 The generator is available as docker image and you can retrieve it by running
 
 ```shell
@@ -16,7 +18,7 @@ in a new folder:
 services:
   frontend:
     type: java
-    port: 3000
+    exposedPort: 3000
     endpoints:
       http:
         /upload:
@@ -56,8 +58,10 @@ To generate manifest files for kubernetes from this file run
 docker run --rm -t -i -v ${PWD}/deployments:/app/deployments -v ${PWD}:/mnt ghcr.io/cisco-open/app-simulator-generators-k8s:latest --config /mnt/config.yaml
 ```
 
-This will create a set of YAML files in the `deployments` folder of your current
-working directory.
+## Run application simulation
+
+The last step has created a set of YAML files in the `deployments` folder of
+your current working directory.
 
 To deploy the simulation into your cluster run
 
@@ -66,4 +70,17 @@ kubectl apply -f deployments/
 ```
 
 This will bring up the three services (`frontend`, `processing` and
-`virus-scanner`) and a loader (`user-1`).
+`virus-scanner`) and a loader (`user-1`). Run `kubectl get pods` to verify that
+all services are up and running.
+
+The loader will continuously load from the `/upload` endpoint. You can also
+reach that endpoint yourself, either by opening <http://localhost:3000/upload>
+in the browser or by running the following:
+
+```shell
+curl http://localhost:3000/upload
+```
+
+The files in `deployments/` that were generated now work independent of the
+generator. You can use them wherever you want and you can modify them to your
+needs.

@@ -51,7 +51,7 @@ start!
 After you have tried out application simulator with the quick start, you can
 learn using it with the step by step tutorial:
 
-1. [Two java services](./docs/tutorial/1-two-java-services.md)
+1. [Two services](./docs/tutorial/1-two-services.md)
 2. [A database and more services](./docs/tutorial/2-a-database-and-more-services.md)
 3. [Errors and randomness](./docs/tutorial/3-errors-and-randomness.md)
 4. [Observability with OpenTelemetry](./docs/tutorial/4-observability-with-opentelemetry.md)
