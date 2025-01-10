@@ -8,7 +8,7 @@
     <version>1.0-SNAPSHOT</version>
     <name>javanode</name>
     <properties>
-        <jettyVersion>11.0.0.beta3</jettyVersion>
+        <jettyVersion>11.0.24</jettyVersion>
     </properties>
     <dependencies>
         <dependency>
