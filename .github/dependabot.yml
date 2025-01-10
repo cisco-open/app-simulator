@@ -1,4 +1,3 @@
----
 version: 2
 updates:
   - package-ecosystem: "github-actions"
@@ -12,51 +11,43 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: docker
-    directory: /scripts/generators/docker-compose
+    directory: "/"
+    groups:
+      docker-containers:
+        patterns:
+          - "scripts/generators/docker-compose/*"
+          - "scripts/generators/k8s/*"
+          - "src/databases/mysql/*"
+          - "src/loaders/curl/*"
+          - "src/services/java/*"
+          - "src/services/nodejs/*"
     schedule:
-      interval: daily
+      interval: "daily"
 
   - package-ecosystem: pip
-    directory: /scripts/generators/docker-compose
+    directory: "/"
+    groups:
+      pip-scripts:
+        patterns:
+          - "scripts/generators/docker-compose/*"
+          - "scripts/generators/k8s/*"
     schedule:
-      interval: daily
-
-  - package-ecosystem: docker
-    directory: /scripts/generators/k8s
-    schedule:
-      interval: daily
-
-  - package-ecosystem: pip
-    directory: /scripts/generators/k8s
-    schedule:
-      interval: daily
-
-  - package-ecosystem: docker
-    directory: /src/databases/mysql
-    schedule:
-      interval: daily
-
-  - package-ecosystem: docker
-    directory: /src/loaders/curl
-    schedule:
-      interval: daily
-
-  - package-ecosystem: docker
-    directory: /src/services/java
-    schedule:
-      interval: daily
-
-  - package-ecosystem: docker
-    directory: /src/services/nodejs
-    schedule:
-      interval: daily
+      interval: "daily"
 
   - package-ecosystem: npm
-    directory: /src/services/nodejs
+    directory: "/src/services/nodejs"
+    groups:
+      node-services:
+        patterns:
+          - "src/services/nodejs/*"
     schedule:
-      interval: daily
+      interval: "daily"
 
   - package-ecosystem: maven
-    directory: /src/services/java
+    directory: "/src/services/java"
+    groups:
+      java-services:
+        patterns:
+          - "src/services/java/*"
     schedule:
-      interval: daily
+      interval: "daily"
