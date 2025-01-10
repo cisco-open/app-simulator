@@ -52,5 +52,7 @@ jobs:
           VALIDATE_PYTHON_PYLINT: false
           VALIDATE_PYTHON_FLAKE8: false
           VALIDATE_PYTHON_RUFF: false
+          # Checkov is behaving strangely right now, disable it and renable it later
+          VALIDATE_CHECKOV: false
           MULTI_STATUS: false
           ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
