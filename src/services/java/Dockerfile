@@ -1,4 +1,4 @@
-FROM maven:3-jdk-11@sha256:805f366910aea2a91ed263654d23df58bd239f218b2f9562ff51305be81fa215 AS build
+FROM maven:3-jdk-14@sha256:aea55d01edac9df38eb17d19f6aabb55263f93cc8b23ac170a792922111ea487 AS build
 WORKDIR /home/app
 COPY src /home/app/src
 COPY pom.xml /home/app
