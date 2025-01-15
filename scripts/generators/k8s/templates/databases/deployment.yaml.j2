@@ -3,19 +3,19 @@ kind: Deployment
 metadata:
   name: {{ serviceName }}
   labels:
-    app: {{ appName|default('AppSimulatorApp') }}
-    service: {{ serviceName }}
+    app.kubernetes.io/part-of: {{ appName|default('AppSimulatorApp') }}
+    app.kubernetes.io/name: {{ serviceName }}
 spec:
   replicas: {{ instances|default('1') }}
   selector:
     matchLabels:
-      app: {{ appName|default('AppSimulatorApp') }}
-      service: {{ serviceName }}
+      app.kubernetes.io/part-of: {{ appName|default('AppSimulatorApp') }}
+      app.kubernetes.io/name: {{ serviceName }}
   template:
     metadata:
       labels:
-        app: {{ appName|default('AppSimulatorApp') }}
-        service: {{ serviceName }}
+        app.kubernetes.io/part-of: {{ appName|default('AppSimulatorApp') }}
+        app.kubernetes.io/name: {{ serviceName }}
     spec:
       containers:
       - name: db-container

@@ -11,8 +11,8 @@ metadata:
 {% endif %}
 spec:
   selector:
-    app: {{ appName|default('AppSimulatorApp') }}
-    service: {{ serviceName }}
+    app.kubernetes.io/part-of: {{ appName|default('AppSimulatorApp') }}
+    app.kubernetes.io/name: {{ serviceName }}
   ports:
     - protocol: TCP
       targetPort: {{ servicePort|default('8080') }}
