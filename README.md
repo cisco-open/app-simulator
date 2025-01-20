@@ -63,6 +63,29 @@ describe a microservice architecture and then run it with your preferred
 container orchestration. The configuration file follows a
 [specification](./docs/specification/README.md).
 
+## Application simulator and APM Game
+
+Throughout this repository you will find references to another project, called
+[APM Game](https://github.com/Appdynamics/apm-game/). It is the predecessor
+project of Application simulator and some code has been copied from that
+project. This also means that some components (like Java and Node.js services)
+use older versions of their dependencies and need to be updated. It's a great
+way to [contribute!](./CONTRIBUTING.md).
+
+## Adding more components
+
+If you want to have a service, database or loader using your preferred
+programming language or technology, we are happy to accept a pull request (PR)
+for them. You can use the [specification](./docs/specification/README.md) or
+existing components ([services](./src/services/), [databases](./src/databases/),
+[loaders](./src/loaders/)) as implementation reference. If you'd like to add a
+new service, we recommend that you start with the support of HTTP calls to other
+endpoints, such that your service can be added into a simulation easily.
+
+Furthermore, if you'd like to add a new component type (like a message queue or
+a cache), you can do tht as well! However, we recommend that you raise an issue
+first and we discuss how such a component could be added.
+
 ## Contribute
 
 If you'd like to contribute to this project, check out our
