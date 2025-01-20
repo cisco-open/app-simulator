@@ -1,7 +1,7 @@
 deployments/*
 templates/*
 !deployments/.gitkeep
-config.yaml
+config*.yaml
 !/templates/databases
 !/templates/loaders
 !/templates/services
