@@ -29,6 +29,8 @@ jobs:
             name: services-java
           - context: ./src/services/nodejs
             name: services-nodejs
+          - context: ./src/services/dotnetcore
+            name: services-dotnetcore
           - context: ./src/databases/mysql
             name: databases-mysql
           - context: ./scripts/generators/docker-compose
