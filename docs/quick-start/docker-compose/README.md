@@ -56,7 +56,7 @@ loaders:
 To generate a `docker-compose.yaml` from this file run
 
 ```shell
-docker run --rm -t -i -v ${PWD}:/mnt cisco-open/app-simulator-generators-docker-compose --config /mnt/config.yaml --output /mnt/docker-compose.yaml
+docker run --rm -t -i -v ${PWD}:/mnt ghcr.io/cisco-open/app-simulator-generators-docker-compose --config /mnt/config.yaml --output /mnt/docker-compose.yaml
 ```
 
 ## Run application simulation
