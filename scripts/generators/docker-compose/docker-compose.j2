@@ -4,9 +4,9 @@ services:
   {%- for name, details in scopeDetails.items() %}
   {{ name }}:
     image: {{ global.imageNamePrefix }}app-simulator-{{ scope }}-{{ details.type }}:{{global.imageVersion }}
-    {%- if details.port is defined %}
+    {%- if details.exposedPort is defined %}
     ports:
-      - "{{ details.port }}:{{ global.defaultPorts[scope] }}"
+      - "{{ details.exposedPort }}:{{ global.defaultPorts[scope] }}"
     {%- endif %}
     {%- if global.defaultPorts is defined -%}
     {%- if global.defaultPorts[scope] is defined and global.defaultPorts[scope] != global._defaultDefaultPorts[scope] %}

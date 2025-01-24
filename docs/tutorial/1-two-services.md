@@ -56,7 +56,7 @@ simulation:
 - For docker compose run
 
   ```shell
-  docker run --rm -t -i -v ${PWD}:/mnt cisco-open/app-simulator-generators-docker-compose --config /mnt/config.yaml --output /mnt/docker-compose.yaml
+  docker run --rm -t -i -v ${PWD}:/mnt cisco-open/app-simulator-generators-docker-compose:latest --config /mnt/config.yaml --output /mnt/docker-compose.yaml
   docker compose up
   ```
 
@@ -66,3 +66,5 @@ simulation:
   docker run --rm -t -i -v ${PWD}/deployments:/app/deployments -v ${PWD}:/mnt ghcr.io/cisco-open/app-simulator-generators-k8s:latest --config /mnt/config.yaml
   kubectl apply -f deployments/
   ```
+
+In both cases you will be see three containers being started. 
