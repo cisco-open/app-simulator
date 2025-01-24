@@ -1,8 +1,8 @@
 # docker compose quick start
 
-You can turn an [app sim config](../specification/README.md) into a docker
+You can turn an [app sim config](../../specification/README.md) into a docker
 compose file using the
-[docker compose generator](../../scripts/generators/docker-compose/).
+[docker compose generator](../../../scripts/generators/docker-compose/).
 
 ## Generate compose file
 
