@@ -42,8 +42,7 @@ def process_endpoint(endpoint_data):
     result = []
     for entry in endpoint_data:
         response = pre_process_call(entry)
-        result.append(response)
-    
+        result.append(str(response))
     return Response("\n".join(result), status=200)
 
 def pre_process_call(call):
