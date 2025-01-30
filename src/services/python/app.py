@@ -1,7 +1,6 @@
 import os
 import json
 import time
-import sqlite3
 import logging
 import random
 import requests
