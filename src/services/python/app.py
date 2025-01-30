@@ -145,14 +145,8 @@ def load_from_cache(timeout):
 def query_database(call, catch_exceptions, remote_timeout):
     """Simulates executing an SQL query."""
     try:
-        connection = sqlite3.connect(":memory:")  # Mock in-memory DB
-        cursor = connection.cursor()
-        query = call.split("?query=")[1]
-        cursor.execute(query)
-        connection.commit()
-        connection.close()
-        return f"Database query executed: {call}"
-    except sqlite3.Error as e:
+        return f"Not Supported: {call}"
+    except Exception as e:
         if catch_exceptions:
             return f"Database Error: {str(e)}"
         raise e
