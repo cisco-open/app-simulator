@@ -10,7 +10,7 @@
     "sleep": "^6.3.0"
   },
   "devDependencies": {
-    "eslint": "^6.2.1",
+    "eslint": "^9.19.0",
     "eslint-config-standard": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-json": "^1.4.0",
