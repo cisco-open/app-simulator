@@ -1,111 +1,173 @@
 import os
 import json
-import logging
 import time
+import sqlite3
+import logging
 import random
-from flask import Flask, request, jsonify
 import requests
-import importlib.util
+from flask import Flask, request, jsonify, Response
+from cachetools import TTLCache
 
-# Load configuration from environment variables
-config = json.loads(os.getenv("APP_CONFIG"))
-log_dir = os.getenv("LOG_DIRECTORY", ".")
-custom_code_dir = os.getenv("CUSTOM_CODE_DIR", ".")
+# Setup Logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-# Configure logging
-logging.basicConfig(
-    filename=os.path.join(log_dir, 'python.log'),
-    level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger()
-
-# Initialize Flask app
+# Flask App
 app = Flask(__name__)
 
-# Set up Redis cache if needed (example uses local Redis)
-#cache = redis.Redis(host='localhost', port=6379, db=0)
-# Set port
-port = int(os.environ.get('PORT', 8080))
-endpoints = config.get('endpoints', {}).get('http', {})
-print(f"Config: {config}")
-print(f"Endpoints: {endpoints}")
+# In-Memory Cache (TTL of 60 seconds, max size 100)
+cache = TTLCache(maxsize=100, ttl=60)
+
+# Load Config from Environment
+env_app_config = os.getenv("APP_CONFIG", '{"endpoints": {"http": {}}}')
+config = json.loads(env_app_config)
+endpoints = config.get("endpoints", {}).get("http", {})
+
+print(f"Loaded Endpoints: {endpoints}")
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>", methods=["GET"])
+def handle_request(path):
+    """Handles incoming requests based on configured endpoints."""
+    endpoint = f"/{path}"
+    logger.info(f"Endpoint requested: {endpoint}")
+
+    if endpoint in endpoints:
+        return process_endpoint(endpoints[endpoint])
+    
+    return Response("404 Not Found", status=404)
+
+def process_endpoint(endpoint_data):
+    """Processes the configured endpoint JSON array."""
+    result = []
+    for entry in endpoint_data:
+        response = pre_process_call(entry)
+        result.append(response)
+    
+    return Response("\n".join(result), status=200)
+
+def pre_process_call(call):
+    """Processes individual call configurations."""
+    if isinstance(call, list):
+        call = random.choice(call)
+
+    if isinstance(call, dict):
+        probability = call.get("probability", 1.0)
+        if random.random() > probability:
+            return f"{call.get('call')} was not probable"
+
+        return process_call(call.get("call"), call.get("catchExceptions", True), call.get("remoteTimeout", 1000))
+
+    return process_call(call, True, 1000)
+
+def process_call(call, catch_exceptions, remote_timeout):
+    """Executes various actions based on call type."""
+    logger.info(f"Processing call: {call}")
+
+    try:
+        if call.startswith("sleep"):
+            timeout = int(call.split(",")[1].strip())
+            time.sleep(timeout / 1000)
+            return f"Slept for {timeout}ms"
+
+        elif call.startswith("log"):
+            parts = call.split(",")
+            level = parts[1] if len(parts) > 2 else "info"
+            message = parts[-1]
+            log_message(level, message)
+            return f"Logged ({level}): {message}"
+
+        elif call.startswith("slow"):
+            timeout = int(call.split(",")[1])
+            return build_response(timeout)
+
+        elif call.startswith("cache"):
+            timeout = int(call.split(",")[1])
+            return load_from_cache(timeout)
+
+        elif call.startswith("http://") or call.startswith("https://"):
+            return call_remote(call, catch_exceptions, remote_timeout)
+
+        elif call.startswith("sql://"):
+            return query_database(call, catch_exceptions, remote_timeout)
+
+        elif call.startswith("error"):
+            return Response("500 Internal Server Error", status=500)
+
+        elif call.startswith("image"):
+            src = call.split(",")[1]
+            return f"<img src='{src}' />"
+
+        elif call.startswith("script"):
+            src = call.split(",")[1]
+            return f"<script src='{src}?output=javascript'></script>"
+
+        elif call.startswith("ajax"):
+            src = call.split(",")[1]
+            return f"<script>var xhr = new XMLHttpRequest();xhr.open('GET', '{src}');xhr.send();</script>"
+
+        return f":{call} is not supported"
+
+    except Exception as e:
+        if catch_exceptions:
+            print(f"Caught exception in process_call")
+            return f"Exception: {str(e)}"
+        raise e
+
+def log_message(level, message):
+    """Logs messages at various levels."""
+    level = level.lower()
+    if level == "warn":
+        logger.warning(message)
+    elif level == "error":
+        logger.error(message)
+    elif level == "debug":
+        logger.debug(message)
+    elif level == "trace":
+        logger.debug(message)  # Python doesn't have a "trace" level
+    else:
+        logger.info(message)
 
 def build_response(timeout):
-    time.sleep(timeout)
-    return f"{timeout} slow response"
+    """Simulates a slow response."""
+    time.sleep(timeout / 1000)
+    return f"{timeout}ms slow response"
 
 def load_from_cache(timeout):
-    time.sleep(timeout)  # Simulate delay#
-    return f"{timeout} send data to cache"
+    """Simulates reading/writing to cache."""
+    start = time.time()
+    key = int(time.time() * 1000) % 1000  # Mock key
+    cache[key] = key
+    while (time.time() - start) < (timeout / 1000):
+        pass
+    return f"Cache result: {cache.get(key, 'Not found')}"
 
-def execute_custom_script(script, req):
-    script_path = os.path.join(custom_code_dir, script)
-    custom_script = importlib.util.module_from_spec(spec)
-    spec = importlib.util.spec_from_file_location("custom_script", script_path)
-    spec.loader.exec_module(custom_script)
-    return custom_script.run(req)  # Assume custom script has a run method
-
-def call_remote_service(call, req):
+def query_database(call, catch_exceptions, remote_timeout):
+    """Simulates executing an SQL query."""
     try:
-        if call.startswith("http://"):
-            response = requests.get(call)
-            return response.json()
-        return None
-    except Exception as e:
-        logger.error("Error calling remote service: %s", e)
-        return None
+        connection = sqlite3.connect(":memory:")  # Mock in-memory DB
+        cursor = connection.cursor()
+        query = call.split("?query=")[1]
+        cursor.execute(query)
+        connection.commit()
+        connection.close()
+        return f"Database query executed: {call}"
+    except sqlite3.Error as e:
+        if catch_exceptions:
+            return f"Database Error: {str(e)}"
+        raise e
 
-def process_call(call, req):
-    if call.startswith("error"):
-        _, code, message = call.split(",")
-        raise Exception(f"Code: {code}, Message: {message}")
-    elif call.startswith("sleep"):
-        _, timeout = call.split(",")
-        time.sleep(int(timeout))
-        return f"Slept for {timeout}"
-    elif call.startswith("slow"):
-        _, timeout = call.split(",")
-        return build_response(int(timeout))
-    elif call.startswith("cache"):
-        _, timeout = call.split(",")
-        return load_from_cache(int(timeout))
-    elif call.startswith("code"):
-        _, script = call.split(",")
-        return execute_custom_script(script, req)
-    elif call.startswith("http://"):
-        return call_remote_service(call, req)
-    else:
-        return f"{call} is not supported"
-
-@app.route('/<path:endpoint>', methods=['GET', 'POST'])
-def handle_request(endpoint):
-    my_endpoint = "/" + endpoint
-    logger.info(f"Endpoint: {my_endpoint}")
-    if my_endpoint in endpoints:
-        calls = endpoints[my_endpoint]
-        logger.info(f"Endpoint: {my_endpoint}")
-        results = []
-        for call in calls:
-            try:
-                logger.info(f"Process call {call}")
-                result = process_call(call, request)
-                results.append(result)
-            except Exception as e:
-                logger.error(e)
-                return jsonify({"error": str(e)}), 500
-        return jsonify(results)
-    else:
-        return '404 Not Found', 404
-
-@app.route("/")
-def home():
-    return "Home"
-
-@app.route("/healthz", methods=['GET', 'POST'])
-def health():
-    return "OK"
+def call_remote(call, catch_exceptions, remote_timeout):
+    """Performs an HTTP request."""
+    try:
+        response = requests.get(call, timeout=remote_timeout)
+        return response.text
+    except requests.RequestException as e:
+        if catch_exceptions:
+            return f"HTTP Error: {str(e)}"
+        raise e
 
 if __name__ == "__main__":
-    print(f"app-simulator running on port {port}")
-    app.run(host='0.0.0.0', debug=False, port=port)
+    port = int(os.getenv("PORT", 8080))
+    logger.info(f"Starting Flask server on port {port}")
+    app.run(host="0.0.0.0", port=port, debug=True)
