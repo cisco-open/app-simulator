@@ -1,1 +1,4 @@
-*   @cisco-open/app-simulator-admins
+# Maintainers are responsible for the code of the project and asked to review
+*           @cisco-open/app-simulator-maintainers
+# The .github repo contains CI, settings, etc and changes should be reviewed and approved by admins
+/.github/   @cisco-open/app-simulator-admins
