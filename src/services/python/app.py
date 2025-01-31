@@ -6,6 +6,8 @@ import random
 import requests
 from flask import Flask, request, jsonify, Response
 from cachetools import TTLCache
+from datetime import datetime
+from cronchecker import is_time_matching_cron
 
 # Setup Logging
 logging.basicConfig(level=logging.INFO)
@@ -36,6 +38,13 @@ def handle_request(path):
     
     return Response("404 Not Found", status=404)
 
+def is_scheduled(schedule):
+    """Check if the current time matches the given cron schedule."""
+    now = datetime.now()
+    print(f"Time: {now}")
+    print(f"Schedule {schedule}")
+    return is_time_matching_cron(schedule, now)
+
 def process_endpoint(endpoint_data):
     """Processes the configured endpoint JSON array."""
     result = []
@@ -52,7 +61,16 @@ def pre_process_call(call):
     if isinstance(call, dict):
         probability = call.get("probability", 1.0)
         if random.random() > probability:
+            print(f"probability hit")
             return f"{call.get('call')} was not probable"
+        if "schedule" in call:
+            print(f"scheduler hit")
+            if not is_scheduled(call["schedule"]):
+                print(f"scheduler active")
+                return f"{call['call']} was not scheduled"
+            else:
+                print(f"was scheduled")
+                return "was scheduled"
 
         return process_call(call.get("call"), call.get("catchExceptions", True), call.get("remoteTimeout", 1000))
 
@@ -89,7 +107,7 @@ def process_call(call, catch_exceptions, remote_timeout):
         elif call.startswith("sql://"):
             return query_database(call, catch_exceptions, remote_timeout)
 
-        elif call.startswith("error"):
+        elif call.startswith("error"):   
             return Response("500 Internal Server Error", status=500)
 
         elif call.startswith("image"):
