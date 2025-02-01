@@ -21,6 +21,7 @@ updates:
           - "src/loaders/curl/*"
           - "src/services/java/*"
           - "src/services/nodejs/*"
+          - "src/services/dotnetcore/*"
     schedule:
       interval: "daily"
 
@@ -52,52 +53,7 @@ updates:
     schedule:
       interval: "daily"
 
-  - package-ecosystem: docker
-    directory: /scripts/generators/docker-compose
-    schedule:
-      interval: daily
-
-  - package-ecosystem: pip
-    directory: /scripts/generators/docker-compose
-    schedule:
-      interval: daily
-
-  - package-ecosystem: docker
-    directory: /scripts/generators/k8s
-    schedule:
-      interval: daily
-
-  - package-ecosystem: pip
-    directory: /scripts/generators/k8s
-    schedule:
-      interval: daily
-
-  - package-ecosystem: docker
-    directory: /src/databases/mysql
-    schedule:
-      interval: daily
-
-  - package-ecosystem: docker
-    directory: /src/loaders/curl
-    schedule:
-      interval: daily
-
-  - package-ecosystem: docker
-    directory: /src/services/dotnetcore
-    schedule:
-      interval: daily
-
   - package-ecosystem: nuget
-    directory: /src/services/dotnetcore
-    schedule:
-      interval: daily
-
-  - package-ecosystem: docker
-    directory: /src/services/java
-    schedule:
-      interval: daily
-
-  - package-ecosystem: docker
-    directory: /src/services/nodejs
+    directory: /src/services/dotnetcore/*
     schedule:
       interval: daily
