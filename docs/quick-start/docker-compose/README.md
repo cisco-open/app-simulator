@@ -19,7 +19,7 @@ in a new folder:
 services:
   frontend:
     type: java
-    port: 3000
+    exposedPort: 3000
     endpoints:
       http:
         /upload:
