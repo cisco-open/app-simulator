@@ -15,7 +15,7 @@
     "supertest": "^7.0.0"
   },
   "scripts": {
-    "test": "node --test tests/**/*.js"
+    "test": "node --test tests/*.js"
   },
   "type": "module"
 }
