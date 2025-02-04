@@ -53,17 +53,18 @@ function preprocessCall(call) {
   }
   // If call is an object, check for probability
   if (typeof call === "object") {
+    result.call = call.call
     if (
       call.hasOwnProperty("probability") &&
       call.probability <= Math.random()
     ) {
-      result.skipReason = `${call.call} was not probable`;
+      result.skipReason = `${result.call} was not probable`;
       result.skip = true;
     } else if (
       call.hasOwnProperty("schedule") &&
       !cronmatch.match(call.schedule, new Date())
     ) {
-      result.skipReason = `${call.call} was not scheduled`;
+      result.skipReason = `${result.call} was not scheduled`;
       result.skip = true;
     }
 
