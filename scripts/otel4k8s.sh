@@ -15,6 +15,7 @@
 #
 # ./otel4k8s.sh --help
 # 
+# NOTE: Currently only java will be auto instrumented, other languages will be added soon
 
 CERT_MANAGER_VERSION=1.16.3
 O11Y_NAMESPACE=o11y
