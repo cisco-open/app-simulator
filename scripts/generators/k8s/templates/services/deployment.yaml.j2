@@ -42,7 +42,7 @@ spec:
           valueFrom:
             fieldRef:
               apiVersion: v1
-              fieldPath: metadata.labels['service']
+              fieldPath: metadata.labels['app.kubernetes.io/name']
         ports:
         - containerPort: {{ service_port|default('8080') }}
         resources:
