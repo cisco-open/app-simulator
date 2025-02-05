@@ -1,6 +1,8 @@
 import log4js from "log4js";
 
-export const logDir = process.env.LOG_DIRECTORY ? process.env.LOG_DIRECTORY : ".";
+export const logDir = process.env.LOG_DIRECTORY
+  ? process.env.LOG_DIRECTORY
+  : ".";
 
 log4js.configure({
   appenders: {
@@ -9,14 +11,14 @@ log4js.configure({
       filename: `${logDir}/node.log`,
       layout: {
         type: "pattern",
-        pattern: "%d{yyyy-MM-dd hh:mm:ss,SSS} [%z] [%X{AD.requestGUID}] %p %c - %m",
+        pattern: "%d{yyyy-MM-dd hh:mm:ss,SSS} [%z] %p %c - %m",
       },
     },
     CONSOLE: {
       type: "stdout",
       layout: {
         type: "pattern",
-        pattern: "%d{yyyy-MM-dd hh:mm:ss,SSS} [%z] [%X{AD.requestGUID}] %p %c - %m",
+        pattern: "%d{yyyy-MM-dd hh:mm:ss,SSS} [%z] %p %c - %m",
       },
     },
   },
