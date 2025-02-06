@@ -54,7 +54,9 @@ learn using it with the step by step tutorial:
 1. [Two services](./docs/tutorial/1-two-services.md)
 2. [A database and more services](./docs/tutorial/2-a-database-and-more-services.md)
 3. [Errors and randomness](./docs/tutorial/3-errors-and-randomness.md)
-4. [Observability with OpenTelemetry](./docs/tutorial/4-observability-with-opentelemetry.md)
+4. [Observability with cilium Hubble](./docs/tutorial/4-observability-with-cilium-hubble.md)
+5. [Observability with OpenTelemetry](./docs/tutorial/5-observability-with-opentelemetry.md)
+6. [Large deployments with cue](./docs/tutorial/5-large-deployments-with-cue/README.md)
 
 ## Configuration specification
 

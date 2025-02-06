@@ -5,12 +5,19 @@ import "math"
 #adjectives: ["swift", "happy", "brave", "clever", "silent", "bold", "lucky", "fierce", "gentle", "mighty", "shy", "curious", "wise", "playful", "proud", "loyal"]
 #nouns: ["lion", "tiger", "eagle", "panda", "fox", "wolf", "hawk", "bear", "otter", "falcon", "rabbit", "panther", "deer", "owl", "cheetah", "dolphin"]
 
+loaders: {
+	"user1": {
+		type: "curl",
+		wait: 5,
+		sleep: 2,
+		urls: [ "http://swift-lion/next" ] 
+	}
+}
 
 services: {
 	for x in list.Range(0, #depth+1, 1) {
 		for y in list.Range(0, x+1, 1) {
 			"\(#adjectives[x])-\(#nouns[y])": {
-				id:   "\(x)-\(y)"
 				type: "java"
 				endpoints: {
 					http: {

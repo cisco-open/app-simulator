@@ -67,4 +67,4 @@ simulation:
   kubectl apply -f deployments/
   ```
 
-In both cases you will be see three containers being started. 
+In both cases you will be see three containers being started.
