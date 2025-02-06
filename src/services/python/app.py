@@ -8,6 +8,8 @@ from flask import Flask, request, jsonify, Response
 from cachetools import TTLCache
 from datetime import datetime
 from cronchecker import is_time_matching_cron
+import pymysql
+import urllib.parse
 
 # Setup Logging
 logging.basicConfig(level=logging.INFO)
@@ -160,12 +162,50 @@ def load_from_cache(timeout):
 
 def query_database(call, catch_exceptions, remote_timeout):
     """Simulates executing an SQL query."""
+    
+    # Parse the call string to extract host, database name, and query
+    parsed_url = urllib.parse.urlparse(call)
+    # Extract the scheme (e.g., "sql"), host, and path (database name)
+    host = parsed_url.hostname
+    database_name = parsed_url.path.strip('/')
+    query = urllib.parse.parse_qs(parsed_url.query)['query'][0]
+    print(f"Connecting to {call}")
+    print(f"Host:{host}, DB:{database_name}, query:{query}")
+    # Establish a database connection using the parsed host and database name
+    connection = pymysql.connect(
+        host=host,  # dynamically set the host from the parsed URL
+        user='root',
+        password='root',
+        database=database_name,
+        connect_timeout=remote_timeout
+        )
     try:
-        return f"Not Supported: {call}"
-    except Exception as e:
+        # Prepare and execute the SQL statement
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            if query.strip().upper().startswith("SELECT"):
+                # Fetch all results if it's a SELECT query
+                results = cursor.fetchall()
+                return results
+            else:
+                # For INSERT, UPDATE, DELETE, etc., commit the transaction
+                connection.commit()
+                return f"Query executed successfully: {query}"
+
+        # Commit changes for queries that modify the database
+        connection.commit()
+
+    except MySQLError as e:
         if catch_exceptions:
-            return f"Database Error: {str(e)}"
-        raise e
+            return str(e)
+        raise IOError(e)
+
+    finally:
+        if connection:
+            connection.close()
+
+    return f"Database query executed: {call}"
+
 
 def call_remote(call, catch_exceptions, remote_timeout):
     """Performs an HTTP request."""
