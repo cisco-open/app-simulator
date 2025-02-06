@@ -128,17 +128,18 @@ spec:
   exporter:
     endpoint: http://lgtm.${O11Y_NAMESPACE}.svc.cluster.local:4317
   sampler:
-    type: parentbased_traceidratio
-    argument: "0.25"
+    type: always_on
 EOF
 }
 
 retry_until_success add_otel_instrumentation
 
+# TODO: This is currently only injecting the java automatic instrumentation, we need a way to identify the language and inject the right one
+# see https://github.com/cisco-open/app-simulator/issues/147
 for deployment in $(kubectl get deployments -n "${APP_NAMESPACE}" -o jsonpath='{.items[*].metadata.name}'); do
     ${KUBECTL} patch deployment ${deployment} -n "${APP_NAMESPACE}" -p '{"spec": {"template":{"metadata":{"annotations":{"instrumentation.opentelemetry.io/inject-java":"true"}}}} }'
 done
 
-${KUBECTL} rollout restart deployment -n cue-example
+${KUBECTL} rollout restart deployment -n "${APP_NAMESPACE}"
 
 ${KUBECTL} port-forward service/lgtm 3000:3000 4317:4317 4318:4318 --namespace ${O11Y_NAMESPACE} &
