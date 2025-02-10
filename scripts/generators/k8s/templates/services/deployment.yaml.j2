@@ -5,6 +5,8 @@ metadata:
   labels:
     app.kubernetes.io/part-of: {{ appName|default('AppSimulatorApp') }}
     app.kubernetes.io/name: {{ serviceName }}
+    app.kubernetes.io/component: service
+    app-simulator.org/type: {{ type|default('java') }}
 spec:
   replicas: {{ instances|default('1') }}
   selector:

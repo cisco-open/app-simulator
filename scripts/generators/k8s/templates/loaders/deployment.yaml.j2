@@ -5,6 +5,8 @@ metadata:
   labels:
     app.kubernetes.io/part-of: {{ appName|default('AppSimulatorApp') }}
     app.kubernetes.io/name: {{ serviceName }}
+    app.kubernetes.io/component: loader
+    app-simulator.org/type: {{ type }}
   {%- if deploymentAnnotations %}
   annotations:
   {%- for k,v in deploymentAnnotations.items() %}   
