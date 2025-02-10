@@ -1,4 +1,4 @@
-# Tutorial 5: Large deployments with cue
+# Tutorial 6: Large deployments with cue
 
 > [!NOTE]
 >

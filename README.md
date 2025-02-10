@@ -56,7 +56,7 @@ learn using it with the step by step tutorial:
 3. [Errors and randomness](./docs/tutorial/3-errors-and-randomness.md)
 4. [Observability with cilium Hubble](./docs/tutorial/4-observability-with-cilium-hubble.md)
 5. [Observability with OpenTelemetry](./docs/tutorial/5-observability-with-opentelemetry.md)
-6. [Large deployments with cue](./docs/tutorial/5-large-deployments-with-cue/README.md)
+6. [Large deployments with cue](./docs/tutorial/6-large-deployments-with-cue/README.md)
 
 ## Configuration specification
 
