@@ -32,7 +32,7 @@ since all components are available as container images. We provide the best
 experience for docker compose and kubernetes. Pick one of them for a quick
 start!
 
-- [kubernetes quick start](./docs/quick-start/kubernetes.md)
+- [kubernetes quick start](./docs/quick-start/kubernetes/README.md)
 - [docker compose quick start](./docs/quick-start/docker-compose/README.md)
 
 > [!NOTE]
