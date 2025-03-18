@@ -21,6 +21,7 @@ updates:
           - "src/loaders/curl/*"
           - "src/services/java/*"
           - "src/services/nodejs/*"
+          - "src/services/dotnetcore/*"
     schedule:
       interval: "daily"
 
@@ -51,3 +52,8 @@ updates:
           - "src/services/java/*"
     schedule:
       interval: "daily"
+
+  - package-ecosystem: nuget
+    directory: /src/services/dotnetcore/*
+    schedule:
+      interval: daily
