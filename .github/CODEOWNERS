@@ -1,4 +1,4 @@
 # Maintainers are responsible for the code of the project and asked to review
-*           @cisco-open/app-simulator-maintainers
+*           @cisco-open/app-simulator-maintainers @svrnm
 # The .github repo contains CI, settings, etc and changes should be reviewed and approved by admins
-/.github/   @cisco-open/app-simulator-admins
+/.github/   @cisco-open/app-simulator-admins @svrnm
