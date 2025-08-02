@@ -51,14 +51,19 @@ The script requires the following in its runtime environment:
 
 ### 1. Docker
 Build the Docker image:  
-```Bash docker build -t curl-loader```
+```Bash 
+   docker build -t curl-loader
+```
 
 Run the container:   
-```Bash docker run --rm -v $(pwd)/config.json:/config.json curl-loader```
+```Bash 
+   docker run --rm -v $(pwd)/config.json:/config.json curl-loader
+```
 
 ### 2. Docker Compose Integration
 Use this block in your config.yaml:
-```Yaml loaders: 
+```Yaml 
+loaders: 
   user-1:    
    type: curl    
    wait: 0    
@@ -81,7 +86,8 @@ Generate the Docker Compose config:
 
 Here is an example of `docker-compose.yaml` setup:
 
-```Yaml services:  
+```Yaml 
+services:  
   frontend:    
     image: ghcr.io/cisco-open/app-simulator-services-java:edge    
     ports:      
