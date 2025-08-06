@@ -50,13 +50,14 @@ The script requires the following in its runtime environment:
 ## Getting Started with Docker
 
 ### 1. Docker
+
 Build the Docker image:  
-```Bash 
+```bash 
    docker build -t curl-loader
 ```
 
 Run the container:   
-```Bash 
+```bash 
    docker run --rm -v $(pwd)/config.json:/config.json curl-loader
 ```
 
