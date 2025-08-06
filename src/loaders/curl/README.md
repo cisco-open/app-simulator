@@ -63,8 +63,9 @@ Run the container:
 ```
 
 ### 2. Docker Compose Integration
+
 Use this block in your config.yaml:
-```Yaml 
+```yaml 
 loaders: 
   user-1:    
    type: curl    
