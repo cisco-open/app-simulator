@@ -16,13 +16,13 @@ For example:
 If you want to test how your API endpoint on the frontend service handles concurrent traffic, you can list it multiple times in the `urls` array and adjust the `sleep` and `wait` values accordingly to simulate the desired load pattern.
 
 ```JSON
-{   
-  "sleep": 2,  
-  "wait": 5,  
-  "urls": [    
-    "http://frontend/upload",    
-    "http://frontend/upload",    
-    "http://frontend/upload"  
+{
+  "sleep": 2,
+  "wait": 5,
+  "urls": [
+    "http://frontend/upload",
+    "http://frontend/upload",
+    "http://frontend/upload"
   ]
 }
 ```
