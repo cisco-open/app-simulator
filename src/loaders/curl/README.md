@@ -43,8 +43,9 @@ Each of the following parameters must be specified to control how the load is ex
 ## Dependencies
 
 The script requires the following in its runtime environment:
-- curl
-- jq
+
+- [curl](https://curl.se/)
+- [jq](https://jqlang.org/)
 - uuidgen (part of uuid-runtime or util-linux)
 
 ## Getting Started with Docker
