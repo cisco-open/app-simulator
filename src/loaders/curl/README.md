@@ -93,7 +93,7 @@ Generate the Docker Compose config:
 
 Here is an example of `docker-compose.yaml` setup:
 
-```Yaml 
+```yaml 
 services:  
   frontend:    
     image: ghcr.io/cisco-open/app-simulator-services-java:edge    
