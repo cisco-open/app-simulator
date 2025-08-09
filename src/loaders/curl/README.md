@@ -2,7 +2,6 @@
 
 > Load Testing with Application Simulator
 
----
 
 Looking to test your services under realistic conditions? Meet `Curl loader`,the lightweight load generation component built right into the [Application Simulator project](https://github.com/cisco-open/app-simulator) by Cisco Open Source.
 
