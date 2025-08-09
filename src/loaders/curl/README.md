@@ -36,6 +36,7 @@ Each of the following parameters must be specified to control how the load is ex
 | URLs          | array         |list of service URLs to target            |
 
 ## Behavior Summary
+
 - **Initial Delay**: Waits for the duration specified in wait (in seconds) before initiating any requests.
 - **Request Execution**: Sends repeated HTTP GET requests to each URL in the list, automatically appending a `?unique_session_id=<uuid>` parameter to ensure each request is distinct.
 - **Loop Interval**: Pauses for the duration specified in sleep (in seconds) between each full cycle of requests to all URLs.
