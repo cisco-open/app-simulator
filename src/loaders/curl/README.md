@@ -1,5 +1,6 @@
-# **Curl loader quick start**
-### *Load Testing with Application Simulator*
+# Curl loader quick start
+
+> Load Testing with Application Simulator
 
 ---
 
