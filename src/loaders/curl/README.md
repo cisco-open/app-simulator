@@ -80,13 +80,16 @@ loaders: 
 
 ```
 Generate the Docker Compose config:
-```Bash 
+
+```vash 
   docker run --rm -v ${PWD}:/mnt \  
   ghcr.io/cisco-open/app-simulator-generators-docker-compose   
   --config /mnt/config.yaml \  
   --output /mnt/docker-compose.yaml
 ```
+
 ### 3. Example Scenario
+
 
 Here is an example of `docker-compose.yaml` setup:
 
