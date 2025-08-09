@@ -102,7 +102,8 @@ services: 
   user-1:    
     image: ghcr.io/cisco-open/app-simulator-loaders-curl:edge
 ```
-After running `docker compose up `,the loader will continuously simulate user-traffic to frontend.
+
+After running `docker compose up`, the loader will continuously simulate user-traffic to frontend.
 
 ## Tracing with Jaeger
 
