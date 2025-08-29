@@ -1,11 +1,4 @@
-# Curl loader quick start
-
-> Load Testing with Application Simulator
-
-
-Looking to test your services under realistic conditions? Meet `Curl loader`,the lightweight load generation component built right into the [Application Simulator project](https://github.com/cisco-open/app-simulator) by Cisco Open Source.
-
-Designed for speed, simplicity, and reliability, curl loader lets you simulate real world HTTP traffic using a config.json file.
+# Curl loader
 
 ## Configuration
 
@@ -15,7 +8,7 @@ For example:
 
 If you want to test how your API endpoint on the frontend service handles concurrent traffic, you can list it multiple times in the `urls` array and adjust the `sleep` and `wait` values accordingly to simulate the desired load pattern.
 
-```JSON
+```json
 {
   "sleep": 2,
   "wait": 5,
@@ -29,11 +22,11 @@ If you want to test how your API endpoint on the frontend service handles concur
 
 Each of the following parameters must be specified to control how the load is executed:
 
-| field         | type          | description                              |
-| ------------- | ------------- | ---------------------------------------- |
-| Sleep         | number        |seconds to sleep between each request loop|
-| Wait          | number        |initial wait time before the first request|
-| URLs          | array         |list of service URLs to target            |
+| field          | type           | description                                |
+| -------------- | -------------- | ------------------------------------------ |
+| Sleep          | number         | seconds to sleep between each request loop |
+| Wait           | number         | initial wait time before the first request |
+| URLs           | array          | list of service URLs to target             |
 
 ## Behavior Summary
 
@@ -45,61 +38,62 @@ Each of the following parameters must be specified to control how the load is ex
 
 The script requires the following in its runtime environment:
 
-- [curl](https://curl.se/)
-- [jq](https://jqlang.org/)
-- uuidgen (part of uuid-runtime or util-linux)
+- [`curl`](https://curl.se/)
+- [`jq`](https://jqlang.org/)
+- `uuidgen` (part of uuid-runtime or util-linux)
 
 ## Getting Started with Docker
 
-### 1. Docker
+### Docker
 
-Build the Docker image:  
-```bash 
+Build the Docker image:
+
+```bash
    docker build -t curl-loader
 ```
 
-Run the container:   
-```bash 
+Run the container:
+
+```bash
    docker run --rm -v $(pwd)/config.json:/config.json curl-loader
 ```
 
 ### 2. Docker Compose Integration
 
 Use this block in your config.yaml:
-```yaml 
+
+```yaml
 loaders: 
-  user-1:    
-   type: curl    
-   wait: 0    
-   sleep: 2    
-   urls:      
-     - http://frontend/upload      
-     - http://frontend/upload      
+  user-1:   
+   type: curl   
+   wait: 0   
+   sleep: 2   
+   urls:     
+     - http://frontend/upload     
+     - http://frontend/upload     
      - http://frontend/upload
-
-
 ```
+
 Generate the Docker Compose config:
 
-```vash 
-  docker run --rm -v ${PWD}:/mnt \  
-  ghcr.io/cisco-open/app-simulator-generators-docker-compose   
-  --config /mnt/config.yaml \  
+```bash
+  docker run --rm -v ${PWD}:/mnt \ 
+  ghcr.io/cisco-open/app-simulator-generators-docker-compose  
+  --config /mnt/config.yaml \ 
   --output /mnt/docker-compose.yaml
 ```
 
 ### 3. Example Scenario
 
-
 Here is an example of `docker-compose.yaml` setup:
 
-```yaml 
-services:  
-  frontend:    
-    image: ghcr.io/cisco-open/app-simulator-services-java:edge    
-    ports:      
-      - "3000:80"  
-  user-1:    
+```yaml
+services: 
+  frontend:   
+    image: ghcr.io/cisco-open/app-simulator-services-java:edge   
+    ports:     
+      - "3000:80" 
+  user-1:   
     image: ghcr.io/cisco-open/app-simulator-loaders-curl:edge
 ```
 
@@ -107,4 +101,5 @@ After running `docker compose up`, the loader will continuously simulate user-tr
 
 ## Tracing with Jaeger
 
-Combine this loader with OpenTelemetry instrumentation in your services and Jaeger to visualize traces flowing through your architecture.See the  [Observability with OpenTelemetry](https://github.com/cisco-open/app-simulator/blob/main/docs/tutorial/5-observability-with-opentelemetry.md) for details.
+Combine this loader with OpenTelemetry instrumentation in your services and Jaeger to visualize traces flowing through your architecture.
+See the [Observability with OpenTelemetry](../../../docs/tutorial/5-observability-with-opentelemetry.md) for details.
